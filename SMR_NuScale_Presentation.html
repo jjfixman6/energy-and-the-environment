@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Small Modular Reactors — NuScale</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #121729;
+    --bg2: #1b1f3b;
+    --white: #ffffff;
+    --grey: #c8cce0;
+    --muted: #6b7094;
+    --teal: #4ec9b0;
+    --teal-dim: rgba(78, 201, 176, 0.15);
+    --amber: #f0a530;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--white);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* --- Slide container --- */
+  .deck {
+    width: 100vw; height: 100vh;
+    position: relative;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5vh 7vw;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.45s ease, transform 0.45s ease;
+    transform: translateX(30px);
+    background: var(--bg);
+  }
+
+  .slide.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+  }
+
+  .slide.prev {
+    transform: translateX(-30px);
+  }
+
+  /* --- Top accent bar --- */
+  .slide::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--teal), var(--teal) 40%, transparent);
+  }
+
+  /* --- Typography --- */
+  .slide-title {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.3em;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .slide-title-accent {
+    display: block;
+    width: 80px; height: 4px;
+    background: var(--teal);
+    margin-top: 0.5em;
+    margin-bottom: 1.2em;
+    border-radius: 2px;
+  }
+
+  .bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9em;
+    max-width: 700px;
+  }
+
+  .bullets li {
+    font-size: clamp(1rem, 2vw, 1.35rem);
+    font-weight: 400;
+    color: var(--grey);
+    line-height: 1.5;
+    padding-left: 1.6em;
+    position: relative;
+  }
+
+  .bullets li::before {
+    content: '\25B8';
+    position: absolute;
+    left: 0;
+    color: var(--teal);
+    font-size: 1.1em;
+  }
+
+  .takeaway {
+    margin-top: 2em;
+    font-size: clamp(0.85rem, 1.5vw, 1.05rem);
+    color: var(--teal);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    opacity: 0.9;
+    border-left: 3px solid var(--teal);
+    padding-left: 0.8em;
+  }
+
+  /* --- Title slide --- */
+  .slide.title-slide {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .slide.title-slide .slide-title {
+    font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+    margin-bottom: 0.15em;
+  }
+
+  .slide.title-slide .slide-title-accent {
+    margin: 0.5em auto 0.8em;
+    width: 120px;
+  }
+
+  .subtitle {
+    font-size: clamp(1rem, 2.2vw, 1.6rem);
+    color: var(--teal);
+    font-weight: 300;
+    margin-bottom: 0.6em;
+  }
+
+  .meta {
+    font-size: clamp(0.8rem, 1.2vw, 1rem);
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* --- Slide number --- */
+  .slide-num {
+    position: absolute;
+    bottom: 3vh;
+    right: 5vw;
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 300;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* --- Progress bar --- */
+  .progress {
+    position: fixed;
+    bottom: 0; left: 0;
+    height: 3px;
+    background: var(--teal);
+    transition: width 0.4s ease;
+    z-index: 100;
+  }
+
+  /* --- Speaker notes toggle --- */
+  .notes-panel {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    max-height: 0;
+    overflow: hidden;
+    background: rgba(10, 12, 24, 0.96);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(78, 201, 176, 0.3);
+    transition: max-height 0.35s ease;
+    z-index: 200;
+  }
+
+  .notes-panel.open {
+    max-height: 35vh;
+  }
+
+  .notes-content {
+    padding: 2em 5vw;
+    font-size: clamp(0.85rem, 1.3vw, 1rem);
+    color: var(--grey);
+    line-height: 1.7;
+    max-width: 900px;
+    overflow-y: auto;
+    max-height: 33vh;
+  }
+
+  .notes-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--teal);
+    margin-bottom: 0.6em;
+    font-weight: 600;
+  }
+
+  /* --- Help overlay --- */
+  .help {
+    position: fixed;
+    bottom: 3vh; left: 5vw;
+    font-size: 0.7rem;
+    color: var(--muted);
+    z-index: 50;
+    transition: opacity 3s ease;
+  }
+
+  .help.fade { opacity: 0; }
+
+  kbd {
+    display: inline-block;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 3px;
+    padding: 0.1em 0.4em;
+    font-family: inherit;
+    font-size: 0.9em;
+    margin: 0 0.15em;
+  }
+
+  /* --- Emphasis styles for specific slides --- */
+  .highlight { color: var(--teal); font-weight: 600; }
+  .warn { color: var(--amber); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- SLIDE 0: Title -->
+  <div class="slide title-slide active" data-notes="Title slide. Advance after brief introduction.">
+    <h1 class="slide-title">Small Modular Reactors</h1>
+    <span class="slide-title-accent"></span>
+    <p class="subtitle">Engineering, Economics, and the Case for NuScale</p>
+    <p class="meta">Energy and the Environment</p>
+  </div>
+
+  <!-- SLIDE 1: The Baseload Problem -->
+  <div class="slide" data-notes="By 2050, global electricity demand is projected to double. At the same time, we need to cut carbon emissions by roughly fifty percent this decade. Renewables are essential — but solar and wind are intermittent. They cannot guarantee power at 2am in January. Conventional nuclear can — but it costs twenty to thirty billion dollars per plant and takes over fifteen years to build. So the question is: can we get nuclear's reliability without its cost and complexity?">
+    <h2 class="slide-title">The Baseload Problem</h2>
+    <span class="slide-title-accent"></span>
+    <ul class="bullets">
+      <li>Global electricity demand: <span class="highlight">2x by 2050</span></li>
+      <li>Renewables are intermittent — no 24/7 guarantee</li>
+      <li>Conventional nuclear: <span class="warn">$20–30B</span>, 15+ years to build</li>
+    </ul>
+    <p class="takeaway">Can we get nuclear reliability without the cost?</p>
+    <span class="slide-num">1 / 8</span>
+  </div>
+
+  <!-- SLIDE 2: What Are SMRs -->
+  <div class="slide" data-notes="That's the premise behind Small Modular Reactors. An SMR isn't just a smaller reactor — it's a fundamentally different manufacturing model. A conventional plant exceeds 1,000 megawatts and is built entirely on-site — custom-engineered, slow, and expensive. An SMR is under 300 megawatts, factory-fabricated under controlled conditions, then shipped and assembled on-site. That distinction is critical. Factory production means standardized components, tighter quality control, and learning-curve cost reductions — the same logic that transformed aerospace and shipbuilding. And crucially, you don't commit twenty billion dollars upfront. You deploy modules incrementally, matching capacity to demand.">
+    <h2 class="slide-title">A New Manufacturing Model</h2>
+    <span class="slide-title-accent"></span>
+    <ul class="bullets">
+      <li><span class="highlight">&lt; 300 MW</span>, factory-built modules</li>
+      <li>Standardized components, shipped to site</li>
+      <li>Incremental deployment as demand grows</li>
+    </ul>
+    <p class="takeaway">Not a smaller reactor — a different construction paradigm</p>
+    <span class="slide-num">2 / 8</span>
+  </div>
+
+  <!-- SLIDE 3: How It Works -->
+  <div class="slide" data-notes="The underlying physics is identical to any nuclear plant. Uranium-235 undergoes fission — the nucleus splits, and because the fission products have slightly less mass than the original atom, that mass difference is converted to energy, exactly as E equals mc squared predicts. That energy heats pressurized water — held above 300 degrees Celsius by maintaining high pressure — which transfers thermal energy to a secondary loop through a steam generator. The steam drives a turbine connected to a generator. Thermodynamic efficiency sits at 30 to 35 percent — that's the Rankine cycle ceiling for this temperature range. Not a design flaw — just physics.">
+    <h2 class="slide-title">How It Works: Fission to Grid</h2>
+    <span class="slide-title-accent"></span>
+    <ul class="bullets">
+      <li>U-235 fission → <span class="highlight">E = mc²</span> energy release</li>
+      <li>Heat → pressurized water → steam generator</li>
+      <li>Rankine cycle: <span class="highlight">30–35%</span> thermal efficiency</li>
+    </ul>
+    <p class="takeaway">Not a design flaw — just physics</p>
+    <span class="slide-num">3 / 8</span>
+  </div>
+
+  <!-- SLIDE 4: Passive Safety -->
+  <div class="slide" data-notes="Now, here is where NuScale's design makes a genuinely important engineering contribution. Every nuclear reactor — even after shutdown — continues producing decay heat from fission product decay. In a conventional plant, you remove that heat with electrically powered pumps. But pumps need power, and power can fail. Fukushima showed exactly what happens when it does. NuScale eliminates that single point of failure entirely. Its cooling system relies on natural circulation: heated coolant is less dense, so it rises; cooler fluid descends to replace it. This is a convection loop driven by thermodynamics alone — no pumps, no external power, no operator action required. The safety case is physics, not procedure.">
+    <h2 class="slide-title">NuScale: Passive Safety</h2>
+    <span class="slide-title-accent"></span>
+    <ul class="bullets">
+      <li>Natural circulation: <span class="highlight">no pumps needed</span></li>
+      <li>Gravity-driven cooling — no power required</li>
+      <li>Decay heat removed by thermodynamics alone</li>
+    </ul>
+    <p class="takeaway">The safety case is physics, not procedure</p>
+    <span class="slide-num">4 / 8</span>
+  </div>
+
+  <!-- SLIDE 5: Why NuScale -->
+  <div class="slide" data-notes="NuScale is the most deployment-ready SMR design in the world. It is the first — and currently only — SMR to receive design certification from the U.S. Nuclear Regulatory Commission, arguably the most rigorous nuclear regulator on earth. Its integral pressurized water reactor design consolidates the reactor core, steam generator, and pressurizer into a single sealed pressure vessel — eliminating external piping and the failure points that come with it. Each module produces 77 megawatts electric. Six modules give you a 462 megawatt plant.">
+    <h2 class="slide-title">Why NuScale Leads</h2>
+    <span class="slide-title-accent"></span>
+    <ul class="bullets">
+      <li><span class="highlight">First &amp; only</span> NRC-certified SMR design</li>
+      <li>Integral PWR: core + steam gen + pressurizer in one vessel</li>
+      <li>77 MWe per module → <span class="highlight">462 MW</span> with 6 modules</li>
+    </ul>
+    <p class="takeaway">Not a concept — a certified, deployable design</p>
+    <span class="slide-num">5 / 8</span>
+  </div>
+
+  <!-- SLIDE 6: Economics -->
+  <div class="slide" data-notes="Now the hard part — and I want to be honest about this. Capital costs for SMRs are currently estimated at six to ten thousand dollars per kilowatt installed. That is not cheaper than conventional nuclear — it's comparable or worse on a per-kilowatt basis. Projected levelized cost of energy sits at 65 to 90 dollars per megawatt-hour. That beats natural gas when you factor in carbon pricing, but it cannot compete with utility-scale solar at 30 to 40 dollars. The core problem is loss of economies of scale — larger plants spread fixed costs across more megawatts. SMRs don't get that advantage yet. And the cancellation of NuScale's flagship Idaho project confirmed that first-of-a-kind cost risk is real, not theoretical.">
+    <h2 class="slide-title">The Economic Reality</h2>
+    <span class="slide-title-accent"></span>
+    <ul class="bullets">
+      <li>Capital cost: <span class="warn">$6,000–$10,000/kW</span> installed</li>
+      <li>LCOE: $65–90/MWh vs. solar at <span class="highlight">$30–40</span></li>
+      <li>Idaho project cancelled — <span class="warn">FOAK risk is real</span></li>
+    </ul>
+    <p class="takeaway">Loss of economies of scale is the core structural problem</p>
+    <span class="slide-num">6 / 8</span>
+  </div>
+
+  <!-- SLIDE 7: Barriers -->
+  <div class="slide" data-notes="Three structural barriers remain. First, regulatory: even with NRC certification, project-level licensing is slow and expensive — the regulatory framework was not designed for modular, repeated deployment. Second, supply chain: the factory manufacturing model that makes SMRs attractive doesn't exist at scale yet, so the cost advantages remain largely theoretical. Third, market competition: solar and wind costs keep falling. SMRs need to achieve nth-of-a-kind economics — where the tenth or twentieth unit benefits from accumulated manufacturing learning — to close that gap. That requires the first plants to actually get built.">
+    <h2 class="slide-title">Barriers to Deployment</h2>
+    <span class="slide-title-accent"></span>
+    <ul class="bullets">
+      <li><span class="warn">Regulatory:</span> licensing not built for modular</li>
+      <li><span class="warn">Supply chain:</span> factory model unproven at scale</li>
+      <li><span class="warn">Market:</span> solar/wind costs still falling</li>
+    </ul>
+    <p class="takeaway">Nth-of-a-kind economics require the first plants to get built</p>
+    <span class="slide-num">7 / 8</span>
+  </div>
+
+  <!-- SLIDE 8: Conclusion -->
+  <div class="slide" data-notes="So where does that leave us? Small Modular Reactors are not a silver bullet. They will not out-compete solar on cost, and they will not solve the storage problem that renewables face. But what they offer is something very specific: firm, dispatchable, low-carbon baseload power — the kind of generation the grid needs when the wind stops blowing and the sun goes down. The engineering is proven. The passive safety is real. The remaining barrier is economic — and it is solvable, if the first projects get financed and built.">
+    <h2 class="slide-title">Where SMRs Fit</h2>
+    <span class="slide-title-accent"></span>
+    <ul class="bullets">
+      <li>Not a silver bullet — <span class="highlight">a specific tool</span></li>
+      <li><span class="highlight">Firm, dispatchable, low-carbon</span> baseload</li>
+      <li>Engineering proven; barrier is economic &amp; solvable</li>
+    </ul>
+    <p class="takeaway">The grid needs what renewables alone cannot provide</p>
+    <span class="slide-num">8 / 8</span>
+  </div>
+
+</div>
+
+<!-- Progress bar -->
+<div class="progress" id="progress"></div>
+
+<!-- Speaker notes panel -->
+<div class="notes-panel" id="notes">
+  <div class="notes-content">
+    <div class="notes-label">Speaker Notes</div>
+    <p id="notes-text"></p>
+  </div>
+</div>
+
+<!-- Help hint -->
+<div class="help" id="help">
+  <kbd>→</kbd> next &nbsp; <kbd>←</kbd> prev &nbsp; <kbd>N</kbd> notes &nbsp; <kbd>F</kbd> fullscreen
+</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const progress = document.getElementById('progress');
+  const notesPanel = document.getElementById('notes');
+  const notesText = document.getElementById('notes-text');
+  const help = document.getElementById('help');
+  let current = 0;
+  let notesOpen = false;
+
+  function go(idx) {
+    if (idx < 0 || idx >= slides.length) return;
+    slides[current].classList.remove('active');
+    slides[current].classList.add('prev');
+    current = idx;
+    // Remove prev from all
+    slides.forEach(s => s.classList.remove('prev'));
+    slides[current].classList.add('active');
+    // Progress
+    progress.style.width = ((current / (slides.length - 1)) * 100) + '%';
+    // Notes
+    notesText.textContent = slides[current].dataset.notes || '';
+  }
+
+  function next() { go(current + 1); }
+  function prev() { go(current - 1); }
+
+  function toggleNotes() {
+    notesOpen = !notesOpen;
+    notesPanel.classList.toggle('open', notesOpen);
+  }
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen();
+    }
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', function(e) {
+    switch(e.key) {
+      case 'ArrowRight': case 'ArrowDown': case ' ': case 'PageDown':
+        e.preventDefault(); next(); break;
+      case 'ArrowLeft': case 'ArrowUp': case 'PageUp':
+        e.preventDefault(); prev(); break;
+      case 'Home': e.preventDefault(); go(0); break;
+      case 'End': e.preventDefault(); go(slides.length - 1); break;
+      case 'n': case 'N': toggleNotes(); break;
+      case 'f': case 'F': toggleFullscreen(); break;
+      case 'Escape':
+        if (notesOpen) { toggleNotes(); e.preventDefault(); }
+        break;
+    }
+  });
+
+  // Click to advance (left third = prev, rest = next)
+  document.addEventListener('click', function(e) {
+    if (e.target.closest('.notes-panel')) return;
+    if (e.clientX < window.innerWidth * 0.3) prev();
+    else next();
+  });
+
+  // Touch swipe
+  let touchStart = null;
+  document.addEventListener('touchstart', function(e) {
+    touchStart = e.touches[0].clientX;
+  });
+  document.addEventListener('touchend', function(e) {
+    if (touchStart === null) return;
+    const diff = e.changedTouches[0].clientX - touchStart;
+    if (Math.abs(diff) > 50) {
+      if (diff < 0) next(); else prev();
+    }
+    touchStart = null;
+  });
+
+  // Fade help after 5s
+  setTimeout(function() { help.classList.add('fade'); }, 5000);
+
+  // Init
+  go(0);
+})();
+</script>
+
+</body>
+</html>
