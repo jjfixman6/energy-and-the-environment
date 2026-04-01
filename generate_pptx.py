@@ -6,7 +6,7 @@ Generates a professional 16:9 PowerPoint with dark theme and speaker notes.
 from pptx import Presentation
 from pptx.util import Inches, Pt, Emu
 from pptx.dml.color import RGBColor
-from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
+from pptx.enum.text import PP_ALIGN
 from pptx.enum.shapes import MSO_SHAPE
 
 # --- Color Palette ---
@@ -18,8 +18,9 @@ ACCENT2_COLOR = RGBColor(0xF0, 0xA5, 0x30)  # Amber accent
 SUBTLE_COLOR = RGBColor(0x8A, 0x8E, 0xA8)   # Muted text
 SLIDE_NUM_COLOR = RGBColor(0x60, 0x64, 0x80) # Dim slide numbers
 
-SLIDE_WIDTH = Inches(13.333)
-SLIDE_HEIGHT = Inches(7.5)
+# Standard 16:9 dimensions in EMUs
+SLIDE_WIDTH = Emu(12192000)
+SLIDE_HEIGHT = Emu(6858000)
 
 # --- Slide Data ---
 SLIDES = [
@@ -220,9 +221,18 @@ def add_textbox(slide, left, top, width, height, text, font_size, color,
     return txbox
 
 
+def get_blank_layout(prs):
+    """Find blank layout safely."""
+    for layout in prs.slide_layouts:
+        if layout.name == "Blank":
+            return layout
+    # Fallback: use the last layout or the one with fewest placeholders
+    return min(prs.slide_layouts, key=lambda l: len(l.placeholders))
+
+
 def build_slide(prs, slide_data, slide_num, total_slides):
     """Build a single content slide."""
-    slide_layout = prs.slide_layouts[6]  # Blank layout
+    slide_layout = get_blank_layout(prs)
     slide = prs.slides.add_slide(slide_layout)
     set_slide_bg(slide, BG_COLOR)
 
@@ -282,7 +292,7 @@ def build_slide(prs, slide_data, slide_num, total_slides):
 
 def build_title_slide(prs):
     """Build the opening title slide (before S1)."""
-    slide_layout = prs.slide_layouts[6]
+    slide_layout = get_blank_layout(prs)
     slide = prs.slides.add_slide(slide_layout)
     set_slide_bg(slide, BG_COLOR)
 
