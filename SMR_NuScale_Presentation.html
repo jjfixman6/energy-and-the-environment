@@ -294,6 +294,45 @@
   .slide-visual text {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
+
+  /* --- Per-click bullet reveal --- */
+  .bullets li {
+    transition: opacity 0.35s ease, transform 0.35s ease, visibility 0.35s ease;
+  }
+
+  .bullets li.bullet-hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-12px);
+  }
+
+  /* --- Sources slide --- */
+  .sources-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5em 3vw;
+    max-width: 960px;
+    margin-top: 0.5em;
+  }
+
+  .sources-list {
+    list-style: decimal;
+    padding-left: 1.4em;
+    margin: 0;
+  }
+
+  .sources-list li {
+    font-size: clamp(0.6rem, 1vw, 0.82rem);
+    color: var(--grey);
+    line-height: 1.45;
+    margin-bottom: 0.55em;
+  }
+
+  .sources-list li span.src-url {
+    color: var(--teal);
+    font-size: 0.9em;
+    opacity: 0.8;
+  }
 </style>
 </head>
 <body>
@@ -306,6 +345,7 @@
     <span class="slide-title-accent"></span>
     <p class="subtitle">Engineering, Economics, and the Case for NuScale</p>
     <p class="meta">Energy and the Environment</p>
+    <p class="meta" style="margin-top:0.5em;">Joshua Fixman &nbsp;|&nbsp; Professor Lovejoy</p>
   </div>
 
   <!-- SLIDE 1: The Baseload Problem -->
@@ -391,7 +431,7 @@
         <text x="450" y="290" text-anchor="middle" fill="#4ec9b0" font-size="11" opacity="0.7">Reliable</text>
       </svg>
     </div>
-    <span class="slide-num">1 / 8</span>
+    <span class="slide-num">1 / 9</span>
   </div>
 
   <!-- SLIDE 2: What Are SMRs -->
@@ -513,7 +553,7 @@
         <text x="430" y="390" text-anchor="middle" fill="#4ec9b0" font-size="12" font-weight="600">ASSEMBLE</text>
       </svg>
     </div>
-    <span class="slide-num">2 / 8</span>
+    <span class="slide-num">2 / 9</span>
   </div>
 
   <!-- SLIDE 3: How It Works -->
@@ -659,7 +699,7 @@
         <text x="380" y="375" text-anchor="middle" fill="#4ec9b0" font-size="16" font-weight="700">30 – 35%</text>
       </svg>
     </div>
-    <span class="slide-num">3 / 8</span>
+    <span class="slide-num">3 / 9</span>
   </div>
 
   <!-- SLIDE 4: Passive Safety -->
@@ -751,7 +791,7 @@
         <text x="260" y="458" text-anchor="middle" fill="#4ec9b0" font-size="13" font-weight="700">NuScale: no pumps to lose</text>
       </svg>
     </div>
-    <span class="slide-num">4 / 8</span>
+    <span class="slide-num">4 / 9</span>
   </div>
 
   <!-- SLIDE 5: Why NuScale -->
@@ -864,7 +904,7 @@
         <text x="550" y="376" text-anchor="middle" fill="#6b7094" font-size="10">Full Plant Capacity</text>
       </svg>
     </div>
-    <span class="slide-num">5 / 8</span>
+    <span class="slide-num">5 / 9</span>
   </div>
 
   <!-- SLIDE 6: Economics -->
@@ -956,7 +996,7 @@
         <text x="380" y="409" fill="#f0a530" font-size="11" font-weight="600">Loss of economies of scale</text>
       </svg>
     </div>
-    <span class="slide-num">6 / 8</span>
+    <span class="slide-num">6 / 9</span>
   </div>
 
   <!-- SLIDE 7: Barriers -->
@@ -1060,7 +1100,7 @@
         <text x="310" y="352" text-anchor="middle" fill="#6b7094" font-size="10">The first plants must get built to unlock nth-of-a-kind economics</text>
       </svg>
     </div>
-    <span class="slide-num">7 / 8</span>
+    <span class="slide-num">7 / 9</span>
   </div>
 
   <!-- SLIDE 8: Conclusion -->
@@ -1148,7 +1188,31 @@
         <text x="200" y="320" text-anchor="middle" fill="#6b7094" font-size="9" opacity="0.4">No major source</text>
       </svg>
     </div>
-    <span class="slide-num">8 / 8</span>
+    <span class="slide-num">8 / 9</span>
+  </div>
+
+  <!-- SLIDE 9: References -->
+  <div class="slide" data-notes="References slide. All sources used throughout this presentation.">
+    <h2 class="slide-title">References</h2>
+    <span class="slide-title-accent"></span>
+    <div class="sources-cols">
+      <ol class="sources-list">
+        <li>U.S. Nuclear Regulatory Commission. NuScale Small Modular Reactor Design Certification. <em>Federal Register</em>, Vol. 88, No. 11, January 19, 2023. <span class="src-url">federalregister.gov</span></li>
+        <li>U.S. Department of Energy. NRC Approves NuScale Power's Uprated Small Modular Reactor Design. Office of Nuclear Energy, May 2025. <span class="src-url">energy.gov</span></li>
+        <li>International Energy Agency. <em>Projected Costs of Generating Electricity</em>. IEA/NEA, 2020. <span class="src-url">iea.org</span></li>
+        <li>International Energy Agency. <em>World Energy Outlook 2024</em>. IEA, 2024. <span class="src-url">iea.org</span> (capital cost reference: $6,600/kW conventional nuclear, $10,000/kW SMR)</li>
+        <li>International Atomic Energy Agency. <em>Advances in Small Modular Reactor Technology Developments</em>. IAEA, 2022 Edition. <span class="src-url">iaea.org</span></li>
+        <li>Asuega, A. et al. Techno-Economic Analysis of Advanced Small Modular Reactors. U.S. Department of Energy / OSTI, 2024. <span class="src-url">osti.gov</span> (LCOE range: $80–90/MWh)</li>
+      </ol>
+      <ol class="sources-list" start="7">
+        <li>Nøland, J.K. et al. Cost Projections of Small Modular Reactors. IAEA Conference Proceedings, 2024. <span class="src-url">conferences.iaea.org</span></li>
+        <li>Vanatta, M. et al. SMRs: Still Too Expensive, Too Slow, and Too Risky. Institute for Energy Economics and Financial Analysis (IEEFA), May 2024. <span class="src-url">ieefa.org</span></li>
+        <li>Steigerwald, B. et al. Economic Potential and Barriers of Small Modular Reactors in Europe. <em>Renewable and Sustainable Energy Reviews</em>, ScienceDirect, 2024. <span class="src-url">sciencedirect.com</span> (avg. SMR capital cost: €7,031/kW; LCOE: ~€85/MWh)</li>
+        <li>GLOBSEC Think Tank. Faster, Cheaper, Smarter? The Promise and Pitfalls of Small Modular Reactors. June 2025. <span class="src-url">globsec.org</span></li>
+        <li>Utah Associated Municipal Power Systems (UAMPS). Carbon Free Power Project — Final Cost Report. 2023. (LCOE of $89/MWh; project cancellation)</li>
+      </ol>
+    </div>
+    <span class="slide-num">9 / 9</span>
   </div>
 
 </div>
@@ -1179,7 +1243,7 @@
   let current = 0;
   let notesOpen = false;
 
-  function go(idx) {
+  function go(idx, showAllBullets) {
     if (idx < 0 || idx >= slides.length) return;
     slides[current].classList.remove('active');
     slides[current].classList.add('prev');
@@ -1191,10 +1255,28 @@
     progress.style.width = ((current / (slides.length - 1)) * 100) + '%';
     // Notes
     notesText.textContent = slides[current].dataset.notes || '';
+    // Bullets: hide all on forward nav, show all on backward nav
+    const bullets = slides[current].querySelectorAll('.bullets li');
+    if (showAllBullets) {
+      bullets.forEach(function(li) { li.classList.remove('bullet-hidden'); });
+    } else {
+      bullets.forEach(function(li) { li.classList.add('bullet-hidden'); });
+    }
   }
 
-  function next() { go(current + 1); }
-  function prev() { go(current - 1); }
+  function revealNextBullet() {
+    const hidden = slides[current].querySelectorAll('.bullets li.bullet-hidden');
+    if (hidden.length > 0) {
+      hidden[0].classList.remove('bullet-hidden');
+      return true;
+    }
+    return false;
+  }
+
+  function next() {
+    if (!revealNextBullet()) { go(current + 1, false); }
+  }
+  function prev() { go(current - 1, true); }
 
   function toggleNotes() {
     notesOpen = !notesOpen;
@@ -1216,8 +1298,8 @@
         e.preventDefault(); next(); break;
       case 'ArrowLeft': case 'ArrowUp': case 'PageUp':
         e.preventDefault(); prev(); break;
-      case 'Home': e.preventDefault(); go(0); break;
-      case 'End': e.preventDefault(); go(slides.length - 1); break;
+      case 'Home': e.preventDefault(); go(0, false); break;
+      case 'End': e.preventDefault(); go(slides.length - 1, true); break;
       case 'n': case 'N': toggleNotes(); break;
       case 'f': case 'F': toggleFullscreen(); break;
       case 'Escape':
@@ -1251,7 +1333,7 @@
   setTimeout(function() { help.classList.add('fade'); }, 5000);
 
   // Init
-  go(0);
+  go(0, false);
 })();
 </script>
 
