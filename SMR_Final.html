@@ -214,7 +214,8 @@ h2.ttl{
   padding:.8rem;display:flex;flex-direction:column;justify-content:center;align-items:center;
   text-align:center;gap:.4rem;
 }
-.quad.hl{border-color:var(--teal-border);background:rgba(31,217,184,.07)}
+.quad.hl{border-color:var(--teal-border);background:rgba(31,217,184,.07);animation:pulse-border 2.5s ease-in-out infinite}
+@keyframes pulse-border{0%,100%{border-color:rgba(31,217,184,.25);box-shadow:0 0 0 0 rgba(31,217,184,0)}50%{border-color:rgba(31,217,184,.55);box-shadow:0 0 12px 2px rgba(31,217,184,.12)}}
 .quad-name{font-size:clamp(.85rem,1.3vw,1rem);font-weight:500;color:var(--teal)}
 .quad.hl .quad-name{font-size:clamp(1rem,1.6vw,1.25rem)}
 .quad-sub{font-size:.65rem;color:var(--dim);line-height:1.4}
@@ -284,7 +285,7 @@ kbd{display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(
     <div class="col-r">
       <div class="fig">
         <div class="fig-lbl">Renewables vs. Nuclear — Output Profile</div>
-        <svg viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif">
+        <svg viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif" preserveAspectRatio="xMidYMid meet">
           <defs>
             <linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="#f5b942" stop-opacity=".25"/>
@@ -302,44 +303,78 @@ kbd{display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(
           <text x="117" y="18" text-anchor="middle" fill="#f5b942" font-size="10" font-weight="600" letter-spacing=".08em">RENEWABLES</text>
           <text x="382" y="18" text-anchor="middle" fill="#1fd9b8" font-size="10" font-weight="600" letter-spacing=".08em">NUCLEAR BASELOAD</text>
           <!-- axes -->
-          <line x1="22" y1="32" x2="22" y2="168" stroke="#3a3f58" stroke-width="1"/>
-          <line x1="22" y1="168" x2="225" y2="168" stroke="#3a3f58" stroke-width="1"/>
-          <line x1="287" y1="32" x2="287" y2="168" stroke="#3a3f58" stroke-width="1"/>
-          <line x1="287" y1="168" x2="490" y2="168" stroke="#3a3f58" stroke-width="1"/>
+          <line x1="32" y1="32" x2="32" y2="168" stroke="#3a3f58" stroke-width="1"/>
+          <line x1="32" y1="168" x2="225" y2="168" stroke="#3a3f58" stroke-width="1"/>
+          <line x1="297" y1="32" x2="297" y2="168" stroke="#3a3f58" stroke-width="1"/>
+          <line x1="297" y1="168" x2="490" y2="168" stroke="#3a3f58" stroke-width="1"/>
+          <!-- Y-axis MW labels — left panel -->
+          <text x="29" y="168" text-anchor="end" fill="#3a3f58" font-size="7">0</text>
+          <text x="29" y="134" text-anchor="end" fill="#3a3f58" font-size="7">250</text>
+          <text x="29" y="100" text-anchor="end" fill="#3a3f58" font-size="7">500</text>
+          <text x="29" y="66" text-anchor="end" fill="#3a3f58" font-size="7">750</text>
+          <text x="29" y="36" text-anchor="end" fill="#3a3f58" font-size="7">1000</text>
+          <text x="12" y="100" text-anchor="middle" fill="#3a3f58" font-size="7" transform="rotate(-90,12,100)">MW</text>
+          <!-- Y-axis MW labels — right panel -->
+          <text x="294" y="168" text-anchor="end" fill="#3a3f58" font-size="7">0</text>
+          <text x="294" y="134" text-anchor="end" fill="#3a3f58" font-size="7">250</text>
+          <text x="294" y="100" text-anchor="end" fill="#3a3f58" font-size="7">500</text>
+          <text x="294" y="66" text-anchor="end" fill="#3a3f58" font-size="7">750</text>
+          <text x="294" y="36" text-anchor="end" fill="#3a3f58" font-size="7">1000</text>
+          <text x="277" y="100" text-anchor="middle" fill="#3a3f58" font-size="7" transform="rotate(-90,277,100)">MW</text>
           <!-- gridlines -->
-          <line x1="22" y1="100" x2="225" y2="100" stroke="#1e2030" stroke-width="1"/>
-          <line x1="287" y1="100" x2="490" y2="100" stroke="#1e2030" stroke-width="1"/>
+          <line x1="32" y1="134" x2="225" y2="134" stroke="#1e2030" stroke-width="1"/>
+          <line x1="32" y1="100" x2="225" y2="100" stroke="#1e2030" stroke-width="1"/>
+          <line x1="32" y1="66" x2="225" y2="66" stroke="#1e2030" stroke-width="1"/>
+          <line x1="297" y1="134" x2="490" y2="134" stroke="#1e2030" stroke-width="1"/>
+          <line x1="297" y1="100" x2="490" y2="100" stroke="#1e2030" stroke-width="1"/>
+          <line x1="297" y1="66" x2="490" y2="66" stroke="#1e2030" stroke-width="1"/>
           <!-- time labels -->
-          <text x="22"  y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">12am</text>
-          <text x="75"  y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">6am</text>
-          <text x="124" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">12pm</text>
-          <text x="174" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">6pm</text>
+          <text x="32"  y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">12am</text>
+          <text x="72"  y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">4am</text>
+          <text x="112" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">8am</text>
+          <text x="148" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">12pm</text>
+          <text x="184" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">4pm</text>
           <text x="225" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">12am</text>
-          <text x="287" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">12am</text>
-          <text x="340" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">6am</text>
-          <text x="390" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">12pm</text>
-          <text x="440" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">6pm</text>
+          <text x="297" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">12am</text>
+          <text x="337" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">4am</text>
+          <text x="377" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">8am</text>
+          <text x="413" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">12pm</text>
+          <text x="449" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">4pm</text>
           <text x="490" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">12am</text>
-          <!-- solar curve + fill -->
-          <path d="M22,166 L45,162 L65,152 L80,138 L95,112 L110,82 L124,58 L135,48 L148,56 L162,80 L178,110 L193,140 L210,160 L225,166"
+          <!-- Realistic solar curve: flat zero overnight, sharp ramp at sunrise (~7am), peak at noon, sharp drop by 6pm, zero by 8pm -->
+          <!-- x: 32=12am, 72=4am, 112=8am, 148=12pm, 184=4pm, 225=12am. Per hour: (225-32)/24≈8px -->
+          <!-- 2am≈48, 7am≈88, 10am≈112, 12pm≈128, 2pm≈148, 5pm≈172, 7pm≈188, 8pm≈196 -->
+          <path d="M32,166 L48,166 L72,166 L82,166 L92,165 L100,162 L108,155 L115,142 L122,120 L128,90 L134,68 L140,52 L146,48 L150,50 L156,58 L162,76 L168,100 L174,125 L180,146 L186,158 L192,164 L198,166 L210,166 L225,166"
             fill="url(#sg)" stroke="#f5b942" stroke-width="2" stroke-linejoin="round"/>
-          <!-- zero annotations -->
-          <rect x="26" y="153" width="32" height="11" rx="2" fill="rgba(240,90,90,.1)" stroke="rgba(240,90,90,.25)" stroke-width=".8"/>
-          <text x="42" y="161.5" text-anchor="middle" fill="#f05a5a" font-size="7">≈ 0 MW</text>
-          <rect x="189" y="153" width="32" height="11" rx="2" fill="rgba(240,90,90,.1)" stroke="rgba(240,90,90,.25)" stroke-width=".8"/>
-          <text x="205" y="161.5" text-anchor="middle" fill="#f05a5a" font-size="7">≈ 0 MW</text>
-          <!-- peak -->
-          <line x1="135" y1="48" x2="152" y2="36" stroke="#f5b942" stroke-width=".8" stroke-dasharray="3,2"/>
-          <text x="155" y="34" fill="#f5b942" font-size="7.5" font-weight="500">Peak</text>
-          <!-- nuclear flat -->
-          <path d="M287,90 L490,90" fill="none" stroke="#1fd9b8" stroke-width="2.5"/>
-          <path d="M287,90 L490,90 L490,168 L287,168 Z" fill="url(#ng)"/>
+          <!-- Wind trace: irregular, lower amplitude, never zero but unpredictable -->
+          <path d="M32,148 L40,142 L48,150 L56,146 L64,138 L72,145 L80,135 L88,140 L96,132 L104,138 L112,130 L120,136 L128,128 L136,140 L144,134 L152,142 L160,138 L168,148 L176,155 L184,150 L192,158 L200,152 L208,160 L216,155 L225,158"
+            fill="none" stroke="#6ba3f5" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="4,2" opacity=".7"/>
+          <text x="210" y="148" fill="#6ba3f5" font-size="6.5" opacity=".8">Wind</text>
+          <text x="155" y="42" fill="#f5b942" font-size="6.5">Solar</text>
+          <!-- 2am vertical marker — renewables panel -->
+          <line x1="48" y1="32" x2="48" y2="168" stroke="#f05a5a" stroke-width="1" stroke-dasharray="3,3" opacity=".7"/>
+          <rect x="35" y="153" width="26" height="11" rx="2" fill="rgba(240,90,90,.15)" stroke="rgba(240,90,90,.3)" stroke-width=".8"/>
+          <text x="48" y="161" text-anchor="middle" fill="#f05a5a" font-size="6.5" font-weight="600">2am</text>
+          <text x="48" y="30" text-anchor="middle" fill="#f05a5a" font-size="7" font-weight="500">≈ 0 MW</text>
+          <!-- peak label -->
+          <line x1="146" y1="48" x2="158" y2="36" stroke="#f5b942" stroke-width=".8" stroke-dasharray="3,2"/>
+          <text x="161" y="34" fill="#f5b942" font-size="7.5" font-weight="500">Peak ~800 MW</text>
+          <!-- nuclear flat line at ~900 MW = y≈44 on scale where 168=0, 32=1000 -->
+          <path d="M297,46 L490,46" fill="none" stroke="#1fd9b8" stroke-width="2.5"/>
+          <path d="M297,46 L490,46 L490,168 L297,168 Z" fill="url(#ng)"/>
           <!-- 24/7 badge -->
-          <rect x="348" y="78" width="72" height="13" rx="3" fill="rgba(31,217,184,.1)" stroke="rgba(31,217,184,.25)" stroke-width=".8"/>
-          <text x="384" y="87.5" text-anchor="middle" fill="#1fd9b8" font-size="8" font-weight="600">24 / 7 / 365</text>
-          <!-- 2am label nuclear -->
-          <text x="382" y="197" text-anchor="middle" fill="#1fd9b8" font-size="7.5">2am in January → full power</text>
-          <text x="117" y="197" text-anchor="middle" fill="#f05a5a" font-size="7.5">2am in January → zero</text>
+          <rect x="358" y="34" width="72" height="13" rx="3" fill="rgba(31,217,184,.1)" stroke="rgba(31,217,184,.25)" stroke-width=".8"/>
+          <text x="394" y="43.5" text-anchor="middle" fill="#1fd9b8" font-size="8" font-weight="600">24 / 7 / 365</text>
+          <!-- capacity label -->
+          <text x="394" y="58" text-anchor="middle" fill="#1fd9b8" font-size="7">~900 MW constant</text>
+          <!-- 2am vertical marker — nuclear panel -->
+          <line x1="313" y1="32" x2="313" y2="168" stroke="#1fd9b8" stroke-width="1" stroke-dasharray="3,3" opacity=".5"/>
+          <rect x="300" y="153" width="26" height="11" rx="2" fill="rgba(31,217,184,.12)" stroke="rgba(31,217,184,.25)" stroke-width=".8"/>
+          <text x="313" y="161" text-anchor="middle" fill="#1fd9b8" font-size="6.5" font-weight="600">2am</text>
+          <text x="313" y="30" text-anchor="middle" fill="#1fd9b8" font-size="7" font-weight="500">900 MW</text>
+          <!-- bottom contrast labels -->
+          <text x="128" y="197" text-anchor="middle" fill="#f05a5a" font-size="7.5">2am in January → zero output</text>
+          <text x="394" y="197" text-anchor="middle" fill="#1fd9b8" font-size="7.5">2am in January → full power</text>
         </svg>
       </div>
       <div class="stats col3">
@@ -373,7 +408,7 @@ kbd{display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(
       <!-- Comparison diagram: conventional vs SMR -->
       <div class="fig">
         <div class="fig-lbl">Construction paradigm comparison</div>
-        <svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif">
+        <svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif" preserveAspectRatio="xMidYMid meet">
           <!-- TOP: Conventional -->
           <text x="240" y="16" text-anchor="middle" fill="#f05a5a" font-size="9.5" font-weight="600" letter-spacing=".1em">CONVENTIONAL</text>
           <rect x="40" y="24" width="400" height="72" rx="7" fill="#13151f" stroke="rgba(240,90,90,.2)" stroke-width="1"/>
@@ -399,43 +434,61 @@ kbd{display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(
           <text x="240" y="138" text-anchor="middle" fill="#1fd9b8" font-size="9.5" font-weight="600" letter-spacing=".1em">SMALL MODULAR REACTOR</text>
 
           <!-- Step 1: Factory -->
-          <rect x="12" y="146" width="110" height="62" rx="7" fill="#13151f" stroke="rgba(31,217,184,.3)" stroke-width="1.2"/>
-          <text x="67" y="163" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600">FACTORY</text>
-          <rect x="28" y="168" width="78" height="28" rx="3" fill="rgba(31,217,184,.05)"/>
+          <rect x="12" y="146" width="100" height="62" rx="7" fill="#13151f" stroke="rgba(31,217,184,.3)" stroke-width="1.2"/>
+          <text x="62" y="160" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600">FACTORY</text>
+          <!-- factory building icon -->
+          <rect x="30" y="168" width="64" height="28" rx="3" fill="rgba(31,217,184,.05)"/>
           <line x1="42" y1="168" x2="42" y2="196" stroke="rgba(31,217,184,.25)" stroke-width="1"/>
-          <line x1="56" y1="168" x2="56" y2="196" stroke="rgba(31,217,184,.25)" stroke-width="1"/>
-          <line x1="70" y1="168" x2="70" y2="196" stroke="rgba(31,217,184,.25)" stroke-width="1"/>
-          <line x1="84" y1="168" x2="84" y2="196" stroke="rgba(31,217,184,.25)" stroke-width="1"/>
-          <text x="67" y="218" text-anchor="middle" fill="#3a3f58" font-size="8">Controlled QC</text>
+          <line x1="54" y1="168" x2="54" y2="196" stroke="rgba(31,217,184,.25)" stroke-width="1"/>
+          <line x1="66" y1="168" x2="66" y2="196" stroke="rgba(31,217,184,.25)" stroke-width="1"/>
+          <line x1="78" y1="168" x2="78" y2="196" stroke="rgba(31,217,184,.25)" stroke-width="1"/>
+          <text x="62" y="218" text-anchor="middle" fill="#3a3f58" font-size="7.5">Controlled QC</text>
 
-          <!-- Arrow 1 -->
-          <line x1="124" y1="177" x2="143" y2="177" stroke="#1fd9b8" stroke-width="1.5"/>
-          <polygon points="143,173 151,177 143,181" fill="#1fd9b8"/>
-          <text x="137" y="191" text-anchor="middle" fill="#3a3f58" font-size="7.5">Ship</text>
+          <!-- Arrow 1 with transport icons -->
+          <line x1="114" y1="177" x2="138" y2="177" stroke="#1fd9b8" stroke-width="1.5"/>
+          <polygon points="138,173 146,177 138,181" fill="#1fd9b8"/>
+          <!-- truck icon -->
+          <rect x="117" y="186" width="14" height="8" rx="1.5" fill="none" stroke="#1fd9b8" stroke-width=".8" opacity=".7"/>
+          <rect x="109" y="188" width="8" height="6" rx="1" fill="none" stroke="#1fd9b8" stroke-width=".8" opacity=".7"/>
+          <circle cx="114" cy="196" r="2" fill="#1fd9b8" opacity=".5"/>
+          <circle cx="126" cy="196" r="2" fill="#1fd9b8" opacity=".5"/>
+          <text x="130" y="206" text-anchor="middle" fill="#3a3f58" font-size="6.5">Truck / Rail / Barge</text>
+          <text x="130" y="214" text-anchor="middle" fill="#3a3f58" font-size="6.5">3 segments</text>
 
           <!-- Step 2: Module -->
-          <rect x="153" y="146" width="110" height="62" rx="7" fill="#13151f" stroke="rgba(31,217,184,.3)" stroke-width="1.2"/>
-          <text x="208" y="163" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600">MODULE</text>
-          <rect x="183" y="170" width="50" height="26" rx="13" fill="rgba(31,217,184,.1)" stroke="#1fd9b8" stroke-width="1.4"/>
-          <rect x="196" y="177" width="8" height="12" rx="2" fill="#1fd9b8" opacity=".4"/>
-          <rect x="210" y="177" width="8" height="12" rx="2" fill="#1fd9b8" opacity=".4"/>
-          <text x="208" y="218" text-anchor="middle" fill="#3a3f58" font-size="8">&lt;300 MW each</text>
+          <rect x="148" y="146" width="100" height="62" rx="7" fill="#13151f" stroke="rgba(31,217,184,.3)" stroke-width="1.2"/>
+          <text x="198" y="160" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600">MODULE</text>
+          <rect x="175" y="168" width="46" height="26" rx="13" fill="rgba(31,217,184,.1)" stroke="#1fd9b8" stroke-width="1.4"/>
+          <rect x="186" y="175" width="7" height="12" rx="2" fill="#1fd9b8" opacity=".4"/>
+          <rect x="199" y="175" width="7" height="12" rx="2" fill="#1fd9b8" opacity=".4"/>
+          <text x="198" y="218" text-anchor="middle" fill="#3a3f58" font-size="7.5">&lt;300 MW each</text>
 
           <!-- Arrow 2 -->
-          <line x1="265" y1="177" x2="284" y2="177" stroke="#1fd9b8" stroke-width="1.5"/>
-          <polygon points="284,173 292,177 284,181" fill="#1fd9b8"/>
-          <text x="278" y="191" text-anchor="middle" fill="#3a3f58" font-size="7.5">Stack</text>
+          <line x1="250" y1="177" x2="274" y2="177" stroke="#1fd9b8" stroke-width="1.5"/>
+          <polygon points="274,173 282,177 274,181" fill="#1fd9b8"/>
+          <text x="266" y="191" text-anchor="middle" fill="#3a3f58" font-size="7">Assemble</text>
 
           <!-- Step 3: Plant -->
-          <rect x="294" y="146" width="174" height="62" rx="7" fill="#13151f" stroke="rgba(31,217,184,.3)" stroke-width="1.2"/>
-          <text x="381" y="163" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600">MODULAR PLANT</text>
-          <rect x="312" y="170" width="30" height="22" rx="11" fill="rgba(31,217,184,.12)" stroke="#1fd9b8" stroke-width="1.2"/>
-          <rect x="350" y="170" width="30" height="22" rx="11" fill="rgba(31,217,184,.12)" stroke="#1fd9b8" stroke-width="1.2"/>
-          <rect x="388" y="170" width="30" height="22" rx="11" fill="rgba(31,217,184,.12)" stroke="#1fd9b8" stroke-width="1.2"/>
-          <text x="327" y="185" text-anchor="middle" fill="#1fd9b8" font-size="7">77MW</text>
-          <text x="365" y="185" text-anchor="middle" fill="#1fd9b8" font-size="7">77MW</text>
-          <text x="403" y="185" text-anchor="middle" fill="#1fd9b8" font-size="7">77MW</text>
-          <text x="381" y="218" text-anchor="middle" fill="#3a3f58" font-size="8">Scale as demand grows</text>
+          <rect x="284" y="146" width="184" height="62" rx="7" fill="#13151f" stroke="rgba(31,217,184,.3)" stroke-width="1.2"/>
+          <text x="376" y="160" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600">MODULAR PLANT</text>
+          <rect x="302" y="168" width="28" height="22" rx="11" fill="rgba(31,217,184,.12)" stroke="#1fd9b8" stroke-width="1.2"/>
+          <rect x="336" y="168" width="28" height="22" rx="11" fill="rgba(31,217,184,.12)" stroke="#1fd9b8" stroke-width="1.2"/>
+          <rect x="370" y="168" width="28" height="22" rx="11" fill="rgba(31,217,184,.12)" stroke="#1fd9b8" stroke-width="1.2"/>
+          <rect x="404" y="168" width="28" height="22" rx="11" fill="rgba(31,217,184,.08)" stroke="#1fd9b8" stroke-width="1" stroke-dasharray="3,2"/>
+          <rect x="438" y="168" width="22" height="22" rx="11" fill="rgba(31,217,184,.04)" stroke="#1fd9b8" stroke-width=".8" stroke-dasharray="3,2"/>
+          <text x="316" y="183" text-anchor="middle" fill="#1fd9b8" font-size="6.5">77MW</text>
+          <text x="350" y="183" text-anchor="middle" fill="#1fd9b8" font-size="6.5">77MW</text>
+          <text x="384" y="183" text-anchor="middle" fill="#1fd9b8" font-size="6.5">77MW</text>
+          <text x="418" y="183" text-anchor="middle" fill="#7a7f9a" font-size="6.5">+77</text>
+          <text x="449" y="183" text-anchor="middle" fill="#3a3f58" font-size="6">...</text>
+          <text x="376" y="218" text-anchor="middle" fill="#3a3f58" font-size="7.5">Scale as demand grows</text>
+
+          <!-- Learning curve annotation -->
+          <rect x="12" y="228" width="456" height="28" rx="5" fill="#13151f" stroke="rgba(31,217,184,.15)" stroke-width="1"/>
+          <text x="24" y="240" fill="#1fd9b8" font-size="8" font-weight="500">📉 Learning Curve:</text>
+          <text x="120" y="240" fill="#7a7f9a" font-size="7.5">~10–15% cost reduction per doubling of cumulative units → sets up nth-of-a-kind economics (see Slide 6)</text>
+          <line x1="24" y1="248" x2="112" y2="248" stroke="#1fd9b8" stroke-width="1.5" opacity=".4"/>
+          <path d="M24,252 Q50,248 70,246 Q90,244 112,244" fill="none" stroke="#1fd9b8" stroke-width="1" opacity=".6"/>
         </svg>
       </div>
     </div>
@@ -465,82 +518,114 @@ kbd{display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(
     <div class="col-r">
       <div class="fig" style="flex:1">
         <div class="fig-lbl">Rankine Cycle — T-s Diagram (based on IAPWS IF-97 steam tables)</div>
-        <svg viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif" style="width:100%;height:100%;max-height:55vh">
+        <svg viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;max-height:55vh">
           <defs>
             <linearGradient id="domeGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#6ba3f5" stop-opacity=".18"/>
-              <stop offset="100%" stop-color="#6ba3f5" stop-opacity=".04"/>
+              <stop offset="0%" stop-color="#6ba3f5" stop-opacity=".15"/>
+              <stop offset="100%" stop-color="#6ba3f5" stop-opacity=".03"/>
+            </linearGradient>
+            <linearGradient id="workGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#1fd9b8" stop-opacity=".12"/>
+              <stop offset="100%" stop-color="#1fd9b8" stop-opacity=".03"/>
             </linearGradient>
           </defs>
+          <!-- Scale: x = 55 + s*40 (s: 0→8.5 kJ/kg·K), y = 220 - T*0.48 (T: 0→375°C) -->
           <!-- Axes -->
           <line x1="55" y1="15" x2="55" y2="220" stroke="#3a3f58" stroke-width="1.5"/>
-          <line x1="55" y1="220" x2="400" y2="220" stroke="#3a3f58" stroke-width="1.5"/>
-          <!-- Axis arrows -->
+          <line x1="55" y1="220" x2="405" y2="220" stroke="#3a3f58" stroke-width="1.5"/>
           <polygon points="55,10 51,20 59,20" fill="#3a3f58"/>
-          <polygon points="405,220 395,216 395,224" fill="#3a3f58"/>
-          <!-- Axis labels -->
-          <text x="28" y="120" text-anchor="middle" fill="#7a7f9a" font-size="11" font-weight="500" transform="rotate(-90,28,120)">Temperature T (°C)</text>
-          <text x="228" y="242" text-anchor="middle" fill="#7a7f9a" font-size="11" font-weight="500">Specific Entropy s (kJ/kg·K)</text>
-          <!-- Saturation dome (vapor dome) -->
-          <!-- Left sat liquid line -->
-          <path d="M120,210 C118,190 115,165 118,140 C122,110 132,85 150,65 C165,48 185,38 210,33"
+          <polygon points="410,220 400,216 400,224" fill="#3a3f58"/>
+          <text x="28" y="120" text-anchor="middle" fill="#7a7f9a" font-size="10" font-weight="500" transform="rotate(-90,28,120)">Temperature T (°C)</text>
+          <text x="228" y="242" text-anchor="middle" fill="#7a7f9a" font-size="10" font-weight="500">Specific Entropy s (kJ/kg·K)</text>
+          <!-- T-axis tick labels -->
+          <text x="52" y="222" text-anchor="end" fill="#3a3f58" font-size="7">0</text>
+          <text x="52" y="174" text-anchor="end" fill="#3a3f58" font-size="7">100</text>
+          <text x="52" y="126" text-anchor="end" fill="#3a3f58" font-size="7">200</text>
+          <text x="52" y="78" text-anchor="end" fill="#3a3f58" font-size="7">300</text>
+          <text x="52" y="42" text-anchor="end" fill="#3a3f58" font-size="7">374</text>
+          <line x1="53" y1="172" x2="57" y2="172" stroke="#3a3f58" stroke-width="1"/>
+          <line x1="53" y1="124" x2="57" y2="124" stroke="#3a3f58" stroke-width="1"/>
+          <line x1="53" y1="76" x2="57" y2="76" stroke="#3a3f58" stroke-width="1"/>
+          <line x1="53" y1="40" x2="57" y2="40" stroke="#3a3f58" stroke-width="1"/>
+
+          <!-- ASYMMETRIC SATURATION DOME (IAPWS IF-97 steam table values) -->
+          <!-- Left (saturated liquid) line: STEEP — s_f values -->
+          <!-- 35°C: s_f=0.50 → (75,203); 100°C: s_f=1.31 → (107,172); 200°C: s_f=2.33 → (148,124); 300°C: s_f=3.26 → (185,76); 374°C: s_c=4.41 → (231,40) -->
+          <path d="M75,203 C80,195 90,185 107,172 C120,160 132,148 148,124 C160,106 172,90 185,76 C198,58 215,45 231,40"
             fill="none" stroke="#3a3f58" stroke-width="1.2" stroke-dasharray="5,3"/>
-          <!-- Right sat vapor line -->
-          <path d="M210,33 C240,38 268,55 285,80 C300,102 308,130 310,160 C312,183 310,200 308,212"
+          <!-- Right (saturated vapor) line: LONG AND SHALLOW — s_g values -->
+          <!-- 374°C: s_c=4.41 → (231,40); 300°C: s_g=5.71 → (283,76); 200°C: s_g=6.43 → (312,124); 100°C: s_g=7.36 → (349,172); 35°C: s_g=8.35 → (389,203) -->
+          <path d="M231,40 C248,48 262,58 283,76 C298,92 306,108 312,124 C320,145 332,160 349,172 C365,184 378,195 389,203"
             fill="none" stroke="#3a3f58" stroke-width="1.2" stroke-dasharray="5,3"/>
           <!-- Dome fill -->
-          <path d="M120,210 C118,190 115,165 118,140 C122,110 132,85 150,65 C165,48 185,38 210,33 C240,38 268,55 285,80 C300,102 308,130 310,160 C312,183 310,200 308,212 Z"
+          <path d="M75,203 C80,195 90,185 107,172 C120,160 132,148 148,124 C160,106 172,90 185,76 C198,58 215,45 231,40 C248,48 262,58 283,76 C298,92 306,108 312,124 C320,145 332,160 349,172 C365,184 378,195 389,203 Z"
             fill="url(#domeGrad)"/>
-          <!-- Critical point -->
-          <circle cx="210" cy="33" r="4" fill="#6ba3f5" opacity=".7"/>
-          <text x="218" y="30" fill="#3a3f58" font-size="8.5">Critical point</text>
+          <!-- Critical point at 374°C, 4.41 kJ/kg·K -->
+          <circle cx="231" cy="40" r="4" fill="#6ba3f5" opacity=".8"/>
+          <text x="240" y="34" fill="#6ba3f5" font-size="8" font-weight="500">Critical point</text>
+          <text x="240" y="44" fill="#3a3f58" font-size="7">374°C, 22.1 MPa</text>
           <!-- Dome label -->
-          <text x="215" y="130" text-anchor="middle" fill="#3a3f58" font-size="9" font-style="italic">Two-phase</text>
-          <text x="215" y="142" text-anchor="middle" fill="#3a3f58" font-size="9" font-style="italic">region</text>
+          <text x="230" y="140" text-anchor="middle" fill="#3a3f58" font-size="9" font-style="italic">Two-phase</text>
+          <text x="230" y="152" text-anchor="middle" fill="#3a3f58" font-size="9" font-style="italic">region</text>
 
-          <!-- RANKINE CYCLE PATH -->
-          <!-- State points: 1(pump in)=low T low s, 2(pump out)=low T low s+tiny, 3(turbine in)=high T, 4(turbine out)=medium T high s -->
-          <!-- 1: (80, 210)  2: (82, 175)  3: (320, 60)  4: (320, 210) -->
-          <!-- Process 1→2: isentropic pump (nearly vertical, slight s increase) -->
-          <line x1="80" y1="212" x2="82" y2="172" stroke="#f5b63e" stroke-width="2.2" stroke-linecap="round"/>
-          <!-- Process 2→3: isobaric boiler (horizontal then curving up) -->
-          <path d="M82,172 C82,172 100,172 140,155 C185,135 260,80 320,60" fill="none" stroke="#f05a5a" stroke-width="2.2" stroke-linecap="round"/>
-          <!-- Process 3→4: isentropic expansion (vertical down) -->
-          <line x1="320" y1="60" x2="308" y2="212" stroke="#6ba3f5" stroke-width="2.2" stroke-linecap="round"/>
-          <!-- Process 4→1: isobaric condenser (horizontal left) -->
-          <line x1="308" y1="212" x2="80" y2="212" stroke="#1fd9b8" stroke-width="2.2" stroke-linecap="round"/>
+          <!-- CARNOT CYCLE OVERLAY (dashed rectangle) -->
+          <!-- T_H=310°C → y=71, T_C=35°C → y=203, s₁=0.50 → x=75, s₃=5.71 → x=283 -->
+          <rect x="75" y="71" width="208" height="132" rx="0" fill="none" stroke="#7a7f9a" stroke-width="1" stroke-dasharray="6,4" opacity=".5"/>
+          <text x="179" y="68" text-anchor="middle" fill="#7a7f9a" font-size="7.5" font-style="italic">Carnot bound: η = 1 − T꜀/T_H = 1 − 308/583 ≈ 47%</text>
+
+          <!-- RANKINE CYCLE — thermodynamically correct -->
+          <!-- State 1: condenser exit, 35°C, s₁=0.50 → (75, 203) -->
+          <!-- State 2: pump exit (isentropic), ~38°C, s₂=s₁=0.50 → (75, 202) — barely moves -->
+          <!-- State 3: turbine inlet, saturated vapor ~300°C, s₃=5.71 → (283, 76) -->
+          <!-- State 4: turbine exit (isentropic), wet steam 35°C, s₄=s₃=5.71 → (283, 203) -->
+
+          <!-- W_net shaded area (enclosed cycle) -->
+          <path d="M75,202 C78,180 90,160 110,145 C140,120 200,90 283,76 L283,203 L75,203 Z" fill="url(#workGrad)" opacity=".6"/>
+
+          <!-- Process 1→2: isentropic pump — PERFECTLY VERTICAL -->
+          <line x1="75" y1="203" x2="75" y2="201" stroke="#f5b63e" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Process 2→3: isobaric boiler — subcooled heating + boiling + slight superheat -->
+          <path d="M75,201 C78,180 85,165 100,150 C120,130 160,105 200,90 C230,82 260,78 283,76" fill="none" stroke="#f05a5a" stroke-width="2.2" stroke-linecap="round"/>
+          <!-- Process 3→4: isentropic turbine — PERFECTLY VERTICAL -->
+          <line x1="283" y1="76" x2="283" y2="203" stroke="#6ba3f5" stroke-width="2.2" stroke-linecap="round"/>
+          <!-- Process 4→1: isobaric condenser — horizontal -->
+          <line x1="283" y1="203" x2="75" y2="203" stroke="#1fd9b8" stroke-width="2.2" stroke-linecap="round"/>
 
           <!-- State point dots -->
-          <circle cx="80"  cy="212" r="5" fill="#f5b63e" stroke="#08090f" stroke-width="1.5"/>
-          <circle cx="82"  cy="172" r="5" fill="#f5b63e" stroke="#08090f" stroke-width="1.5"/>
-          <circle cx="320" cy="60"  r="5" fill="#f05a5a" stroke="#08090f" stroke-width="1.5"/>
-          <circle cx="308" cy="212" r="5" fill="#6ba3f5" stroke="#08090f" stroke-width="1.5"/>
+          <circle cx="75"  cy="203" r="5" fill="#f5b63e" stroke="#08090f" stroke-width="1.5"/>
+          <circle cx="75"  cy="201" r="3.5" fill="#f5b63e" stroke="#08090f" stroke-width="1.2"/>
+          <circle cx="283" cy="76"  r="5" fill="#f05a5a" stroke="#08090f" stroke-width="1.5"/>
+          <circle cx="283" cy="203" r="5" fill="#6ba3f5" stroke="#08090f" stroke-width="1.5"/>
 
           <!-- State labels -->
-          <text x="64"  y="216" text-anchor="middle" fill="#f5b63e" font-size="10" font-weight="600">1</text>
-          <text x="64"  y="170" text-anchor="middle" fill="#f5b63e" font-size="10" font-weight="600">2</text>
-          <text x="334" y="58"  text-anchor="middle" fill="#f05a5a" font-size="10" font-weight="600">3</text>
-          <text x="322" y="229" text-anchor="middle" fill="#6ba3f5" font-size="10" font-weight="600">4</text>
+          <text x="64"  y="210" fill="#f5b63e" font-size="10" font-weight="600">1</text>
+          <text x="64"  y="196" fill="#f5b63e" font-size="9" font-weight="600">2</text>
+          <text x="292" y="72"  fill="#f05a5a" font-size="10" font-weight="600">3</text>
+          <text x="292" y="215" fill="#6ba3f5" font-size="10" font-weight="600">4</text>
 
           <!-- Process labels -->
-          <text x="60" y="193" text-anchor="middle" fill="#f5b63e" font-size="8">① Pump</text>
-          <text x="60" y="203" text-anchor="middle" fill="#f5b63e" font-size="7.5">isentropic</text>
-          <text x="195" y="108" text-anchor="middle" fill="#f05a5a" font-size="8">② Boiler</text>
-          <text x="195" y="118" text-anchor="middle" fill="#f05a5a" font-size="7.5">isobaric Q_in</text>
-          <text x="348" y="136" text-anchor="middle" fill="#6ba3f5" font-size="8">③ Turbine</text>
-          <text x="348" y="146" text-anchor="middle" fill="#6ba3f5" font-size="7.5">isentropic</text>
-          <text x="195" y="230" text-anchor="middle" fill="#1fd9b8" font-size="8">④ Condenser — isobaric Q_out</text>
+          <text x="62" y="190" fill="#f5b63e" font-size="7.5">① Pump</text>
+          <text x="62" y="180" fill="#f5b63e" font-size="7">(isentropic, Δs=0)</text>
+          <text x="170" y="102" text-anchor="middle" fill="#f05a5a" font-size="8">② Boiler (isobaric Q_in)</text>
+          <text x="296" y="142" fill="#6ba3f5" font-size="8">③ Turbine</text>
+          <text x="296" y="153" fill="#6ba3f5" font-size="7">(isentropic, Δs=0)</text>
+          <text x="179" y="217" text-anchor="middle" fill="#1fd9b8" font-size="8">④ Condenser — isobaric Q_out</text>
 
-          <!-- High/low pressure lines -->
-          <line x1="55" y1="60"  x2="320" y2="60"  stroke="#3a3f58" stroke-width=".7" stroke-dasharray="4,3"/>
-          <line x1="55" y1="172" x2="82"  y2="172" stroke="#3a3f58" stroke-width=".7" stroke-dasharray="4,3"/>
-          <text x="57" y="57"  fill="#3a3f58" font-size="7.5">High P (~310°C, 15.5 MPa)</text>
-          <text x="57" y="169" fill="#3a3f58" font-size="7.5">Low P (~35°C)</text>
+          <!-- W_net label inside cycle area -->
+          <text x="180" y="170" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="500" opacity=".8">W_net</text>
 
-          <!-- Efficiency annotation -->
-          <rect x="58" y="70" width="112" height="34" rx="4" fill="rgba(24,212,176,.08)" stroke="rgba(24,212,176,.22)" stroke-width="1"/>
-          <text x="114" y="85"  text-anchor="middle" fill="#1fd9b8" font-size="8.5" font-weight="600">η = W_net / Q_in</text>
-          <text x="114" y="97"  text-anchor="middle" fill="#7a7f9a" font-size="8">NuScale: η ≈ 30–35%</text>
+          <!-- Temperature/pressure annotations -->
+          <line x1="55" y1="76"  x2="73"  y2="76"  stroke="#3a3f58" stroke-width=".7" stroke-dasharray="3,2"/>
+          <text x="57" y="73"  fill="#f05a5a" font-size="7">T_H ≈ 300°C</text>
+          <line x1="55" y1="203" x2="73"  y2="203" stroke="#3a3f58" stroke-width=".7" stroke-dasharray="3,2"/>
+          <text x="57" y="200" fill="#1fd9b8" font-size="7">T_C ≈ 35°C</text>
+
+          <!-- Efficiency callout -->
+          <rect x="305" y="30" width="108" height="50" rx="5" fill="rgba(31,217,184,.08)" stroke="rgba(31,217,184,.22)" stroke-width="1"/>
+          <text x="359" y="44" text-anchor="middle" fill="#1fd9b8" font-size="8" font-weight="600">η_Rankine ≈ 31%</text>
+          <text x="359" y="56" text-anchor="middle" fill="#7a7f9a" font-size="7">vs Carnot ≈ 47%</text>
+          <text x="359" y="68" text-anchor="middle" fill="#7a7f9a" font-size="7">η = (h₃−h₄)−(h₂−h₁) / (h₃−h₂)</text>
+          <text x="359" y="76" text-anchor="middle" fill="#3a3f58" font-size="6.5">Irreversibilities reduce efficiency by ~16pp</text>
         </svg>
         <div class="cap">Rankine cycle T-s diagram — four thermodynamic states mapped to NuScale operating conditions</div>
       </div>
@@ -571,7 +656,7 @@ kbd{display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(
     <div class="col-r">
       <div class="fig" style="flex:1;min-height:0">
         <div class="fig-lbl">NuScale natural circulation loop — based on published NuScale technical specifications</div>
-        <svg viewBox="0 0 480 240" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif" style="width:100%;height:100%;max-height:52vh">
+        <svg viewBox="0 0 480 240" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;max-height:52vh">
           <defs>
             <marker id="mu" markerWidth="7" markerHeight="6" refX="3.5" refY="6" orient="auto"><polygon points="0,6 3.5,0 7,6" fill="#f05a5a"/></marker>
             <marker id="md" markerWidth="7" markerHeight="6" refX="3.5" refY="0" orient="auto"><polygon points="0,0 3.5,6 7,0" fill="#6ba3f5"/></marker>
@@ -589,55 +674,82 @@ kbd{display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(
           <rect x="55" y="40" width="116" height="30" rx="5" fill="#13151f" stroke="rgba(107,163,245,.3)" stroke-width="1"/>
           <text x="113" y="55" text-anchor="middle" fill="#6ba3f5" font-size="8.5" font-weight="500">HEAT EXCHANGER</text>
           <text x="113" y="66" text-anchor="middle" fill="#3a3f58" font-size="7">cooling</text>
-          <!-- pump -->
-          <circle cx="50" cy="130" r="18" fill="#13151f" stroke="#f05a5a" stroke-width="1.3"/>
-          <text x="50" y="127" text-anchor="middle" fill="#f05a5a" font-size="7.5" font-weight="600">PUMP</text>
-          <text x="50" y="137" text-anchor="middle" fill="#f05a5a" font-size="7">AC power</text>
-          <!-- pipes -->
-          <line x1="80" y1="170" x2="65" y2="148" stroke="#f05a5a" stroke-width="1.5" stroke-dasharray="3,2"/>
-          <line x1="35" y1="118" x2="35" y2="55" stroke="#f05a5a" stroke-width="1.5" stroke-dasharray="3,2"/>
-          <line x1="35" y1="55" x2="55" y2="55" stroke="#f05a5a" stroke-width="1.5" stroke-dasharray="3,2"/>
-          <line x1="171" y1="55" x2="185" y2="55" stroke="#f05a5a" stroke-width="1.5" stroke-dasharray="3,2"/>
-          <line x1="185" y1="55" x2="185" y2="170" stroke="#f05a5a" stroke-width="1.5" stroke-dasharray="3,2"/>
-          <line x1="185" y1="170" x2="158" y2="170" stroke="#f05a5a" stroke-width="1.5" stroke-dasharray="3,2"/>
-          <!-- failure annotation -->
-          <rect x="28" y="108" width="44" height="14" rx="3" fill="rgba(240,90,90,.12)" stroke="rgba(240,90,90,.3)" stroke-width=".8"/>
-          <text x="50" y="118" text-anchor="middle" fill="#f05a5a" font-size="7.5" font-weight="600">FAILS</text>
-          <text x="113" y="222" text-anchor="middle" fill="#f05a5a" font-size="7.5">Blackout → pump fails → meltdown</text>
+          <!-- pump with impeller blades -->
+          <circle cx="50" cy="125" r="18" fill="#13151f" stroke="#f05a5a" stroke-width="1.3"/>
+          <!-- impeller blades inside pump -->
+          <line x1="50" y1="113" x2="50" y2="137" stroke="#f05a5a" stroke-width="1" opacity=".6"/>
+          <line x1="38" y1="125" x2="62" y2="125" stroke="#f05a5a" stroke-width="1" opacity=".6"/>
+          <line x1="41" y1="116" x2="59" y2="134" stroke="#f05a5a" stroke-width="1" opacity=".6"/>
+          <line x1="59" y1="116" x2="41" y2="134" stroke="#f05a5a" stroke-width="1" opacity=".6"/>
+          <circle cx="50" cy="125" r="4" fill="#f05a5a" opacity=".3"/>
+          <text x="50" y="148" text-anchor="middle" fill="#f05a5a" font-size="7" font-weight="600">PUMP</text>
+          <text x="50" y="157" text-anchor="middle" fill="#f05a5a" font-size="6.5">Requires AC power</text>
+          <!-- pipes — solid for normal operation -->
+          <line x1="80" y1="170" x2="65" y2="143" stroke="#f05a5a" stroke-width="1.5"/>
+          <line x1="35" y1="110" x2="35" y2="55" stroke="#f05a5a" stroke-width="1.5"/>
+          <line x1="35" y1="55" x2="55" y2="55" stroke="#f05a5a" stroke-width="1.5"/>
+          <line x1="171" y1="55" x2="185" y2="55" stroke="#f05a5a" stroke-width="1.5"/>
+          <line x1="185" y1="55" x2="185" y2="170" stroke="#f05a5a" stroke-width="1.5"/>
+          <line x1="185" y1="170" x2="158" y2="170" stroke="#f05a5a" stroke-width="1.5"/>
+          <!-- FAILURE — red dashed break at pump -->
+          <line x1="62" y1="115" x2="72" y2="105" stroke="#f05a5a" stroke-width="2.5" stroke-dasharray="4,3" opacity=".8"/>
+          <rect x="68" y="100" width="36" height="14" rx="3" fill="rgba(240,90,90,.2)" stroke="#f05a5a" stroke-width="1"/>
+          <text x="86" y="110" text-anchor="middle" fill="#f05a5a" font-size="8" font-weight="700">FAIL</text>
+          <!-- X mark on pipe break -->
+          <line x1="62" y1="102" x2="72" y2="112" stroke="#f05a5a" stroke-width="1.5"/>
+          <line x1="72" y1="102" x2="62" y2="112" stroke="#f05a5a" stroke-width="1.5"/>
+          <text x="113" y="222" text-anchor="middle" fill="#f05a5a" font-size="7.5" font-weight="500">Blackout → pump fails → core meltdown</text>
 
           <!-- DIVIDER -->
           <line x1="228" y1="10" x2="228" y2="234" stroke="#2e3350" stroke-width="1"/>
           <text x="228" y="128" text-anchor="middle" fill="#2e3350" font-size="14" font-weight="700" transform="rotate(-90,228,128)">vs</text>
 
           <!-- RIGHT PANEL: NuScale natural circulation -->
-          <rect x="242" y="8" width="230" height="228" rx="10" fill="#0f1018" stroke="rgba(24,212,176,.22)" stroke-width="1.2"/>
-          <text x="357" y="24" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600" letter-spacing=".08em">NUSCALE</text>
+          <!-- Water pool background (passive heat sink) -->
+          <rect x="242" y="8" width="230" height="228" rx="10" fill="rgba(107,163,245,.04)" stroke="rgba(24,212,176,.22)" stroke-width="1.2"/>
+          <!-- Pool water lines -->
+          <path d="M245,220 Q260,216 275,220 Q290,224 305,220 Q320,216 335,220 Q350,224 365,220 Q380,216 395,220 Q410,224 425,220 Q440,216 455,220 Q468,224 470,220" fill="none" stroke="rgba(107,163,245,.15)" stroke-width=".8"/>
+          <path d="M245,210 Q260,206 275,210 Q290,214 305,210 Q320,206 335,210 Q350,214 365,210 Q380,206 395,210 Q410,214 425,210 Q440,206 455,210 Q468,214 470,210" fill="none" stroke="rgba(107,163,245,.1)" stroke-width=".6"/>
+          <text x="460" y="228" text-anchor="end" fill="#6ba3f5" font-size="6" opacity=".6">reactor pool</text>
+          <text x="357" y="22" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600" letter-spacing=".08em">NUSCALE</text>
+
+          <!-- Containment vessel (outer shell) -->
+          <rect x="264" y="30" width="186" height="186" rx="14" fill="none" stroke="rgba(31,217,184,.2)" stroke-width="1.5" stroke-dasharray="6,3"/>
+          <text x="268" y="42" fill="#1fd9b8" font-size="6" opacity=".6">containment vessel</text>
 
           <!-- reactor core -->
-          <rect x="302" y="168" width="110" height="40" rx="4" fill="rgba(240,90,90,.1)" stroke="#f05a5a" stroke-width="1.4"/>
-          <text x="357" y="186" text-anchor="middle" fill="#f05a5a" font-size="8.5" font-weight="500">REACTOR CORE</text>
-          <text x="357" y="198" text-anchor="middle" fill="#f05a5a" font-size="7.5">160 MWt</text>
+          <rect x="310" y="168" width="94" height="36" rx="4" fill="rgba(240,90,90,.1)" stroke="#f05a5a" stroke-width="1.4"/>
+          <text x="357" y="184" text-anchor="middle" fill="#f05a5a" font-size="8" font-weight="500">REACTOR CORE</text>
+          <text x="357" y="196" text-anchor="middle" fill="#f05a5a" font-size="7">160 MWt</text>
 
           <!-- steam generator top -->
-          <rect x="288" y="40" width="138" height="30" rx="5" fill="#13151f" stroke="rgba(107,163,245,.3)" stroke-width="1"/>
-          <text x="357" y="55" text-anchor="middle" fill="#6ba3f5" font-size="8.5" font-weight="500">STEAM GENERATOR</text>
-          <text x="357" y="66" text-anchor="middle" fill="#3a3f58" font-size="7">helical tube bundle</text>
+          <rect x="296" y="46" width="122" height="28" rx="5" fill="#13151f" stroke="rgba(107,163,245,.3)" stroke-width="1"/>
+          <text x="357" y="60" text-anchor="middle" fill="#6ba3f5" font-size="8" font-weight="500">STEAM GENERATOR</text>
+          <text x="357" y="70" text-anchor="middle" fill="#3a3f58" font-size="6.5">helical tube bundle</text>
 
-          <!-- Hot rising arrow — left -->
-          <line x1="290" y1="168" x2="290" y2="72" stroke="#f05a5a" stroke-width="2" marker-end="url(#mu)"/>
-          <text x="277" y="125" text-anchor="middle" fill="#f05a5a" font-size="7.5" font-weight="500" transform="rotate(-90,277,125)">HOT RISES (ρ↓)</text>
+          <!-- Hot rising arrow — left (central hot riser) -->
+          <line x1="300" y1="168" x2="300" y2="76" stroke="#f05a5a" stroke-width="2" marker-end="url(#mu)"/>
+          <text x="280" y="98" text-anchor="middle" fill="#f05a5a" font-size="7" font-weight="500" transform="rotate(-90,280,98)">HOT ↑</text>
+          <text x="290" y="142" text-anchor="end" fill="#f05a5a" font-size="6.5">~310°C</text>
+          <text x="290" y="152" text-anchor="end" fill="#f05a5a" font-size="6.5">ρ_hot (lower)</text>
 
-          <!-- Cool descending arrow — right -->
-          <line x1="424" y1="72" x2="424" y2="168" stroke="#6ba3f5" stroke-width="2" marker-end="url(#md)"/>
-          <text x="437" y="120" text-anchor="middle" fill="#6ba3f5" font-size="7.5" font-weight="500" transform="rotate(90,437,120)">COOL FALLS (ρ↑)</text>
+          <!-- Cool descending arrow — right (annular downcomer) -->
+          <line x1="414" y1="76" x2="414" y2="168" stroke="#6ba3f5" stroke-width="2" marker-end="url(#md)"/>
+          <text x="434" y="98" text-anchor="middle" fill="#6ba3f5" font-size="7" font-weight="500" transform="rotate(90,434,98)">COOL ↓</text>
+          <text x="424" y="142" fill="#6ba3f5" font-size="6.5">~270°C</text>
+          <text x="424" y="152" fill="#6ba3f5" font-size="6.5">ρ_cool (higher)</text>
+
+          <!-- Density difference annotation -->
+          <text x="357" y="96" text-anchor="middle" fill="#7a7f9a" font-size="7">Δρ drives circulation</text>
 
           <!-- No pumps badge -->
-          <rect x="300" y="108" width="114" height="42" rx="6" fill="#07080e" stroke="rgba(24,212,176,.4)" stroke-width="1.2"/>
-          <text x="357" y="126" text-anchor="middle" fill="#1fd9b8" font-size="12" font-weight="600">NO PUMPS</text>
-          <text x="357" y="140" text-anchor="middle" fill="#7a7f9a" font-size="7.5">Gravity + thermodynamics only</text>
+          <rect x="312" y="104" width="90" height="38" rx="6" fill="#07080e" stroke="rgba(24,212,176,.4)" stroke-width="1.2"/>
+          <text x="357" y="120" text-anchor="middle" fill="#1fd9b8" font-size="11" font-weight="600">NO PUMPS</text>
+          <text x="357" y="134" text-anchor="middle" fill="#7a7f9a" font-size="7">Buoyancy-driven only</text>
 
-          <!-- Success annotation -->
-          <text x="357" y="222" text-anchor="middle" fill="#1fd9b8" font-size="7.5">Blackout → loop continues → safe</text>
+          <!-- 30+ days callout -->
+          <rect x="272" y="218" width="170" height="14" rx="3" fill="rgba(31,217,184,.1)" stroke="rgba(31,217,184,.3)" stroke-width=".8"/>
+          <text x="357" y="228" text-anchor="middle" fill="#1fd9b8" font-size="7" font-weight="500">Pool absorbs decay heat for 30+ days — no intervention</text>
         </svg>
       </div>
     </div>
@@ -663,65 +775,118 @@ kbd{display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(
       <!-- Integral vessel diagram based on published NuScale specs -->
       <div class="fig">
         <div class="fig-lbl">NuScale Power Module — schematic based on published specs (NuScale Corp. proprietary imagery unavailable)</div>
-        <svg viewBox="0 0 460 270" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif">
+        <svg viewBox="0 0 460 270" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <marker id="dimArr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><polygon points="0,1 6,3 0,5" fill="#7a7f9a"/></marker>
+          </defs>
           <!-- Left: vessel cross-section -->
-          <text x="110" y="14" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600" letter-spacing=".08em">INTEGRAL VESSEL (20m × 2.7m)</text>
-          <!-- Containment outer -->
-          <rect x="20" y="20" width="180" height="230" rx="28" fill="#0f1018" stroke="rgba(31,217,184,.3)" stroke-width="1.8"/>
-          <!-- Pool water -->
-          <rect x="22" y="22" width="176" height="226" rx="26" fill="rgba(107,163,245,.04)"/>
+          <text x="110" y="12" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600" letter-spacing=".08em">INTEGRAL VESSEL CROSS-SECTION</text>
+          <!-- Containment outer (concentric shell) -->
+          <rect x="20" y="18" width="180" height="230" rx="28" fill="#0f1018" stroke="rgba(31,217,184,.3)" stroke-width="1.8"/>
+          <rect x="22" y="20" width="176" height="226" rx="26" fill="rgba(107,163,245,.04)"/>
+          <text x="30" y="35" fill="#6ba3f5" font-size="6" opacity=".7">containment</text>
           <!-- RPV inner -->
-          <rect x="46" y="36" width="128" height="198" rx="20" fill="#13151f" stroke="rgba(31,217,184,.5)" stroke-width="1.3"/>
-          <!-- Pressurizer -->
-          <rect x="68" y="44" width="84" height="30" rx="8" fill="rgba(31,217,184,.12)" stroke="#1fd9b8" stroke-width="1"/>
-          <text x="110" y="63" text-anchor="middle" fill="#1fd9b8" font-size="8" font-weight="500">PRESSURIZER</text>
-          <!-- Hot riser -->
-          <rect x="90" y="80" width="40" height="72" rx="4" fill="rgba(240,90,90,.1)" stroke="#f05a5a" stroke-width="1"/>
-          <text x="110" y="100" text-anchor="middle" fill="#f05a5a" font-size="7.5">HOT</text>
-          <text x="110" y="112" text-anchor="middle" fill="#f05a5a" font-size="7.5">RISER</text>
-          <!-- Steam generator (helical) around riser -->
-          <rect x="62" y="80" width="26" height="72" rx="3" fill="rgba(107,163,245,.1)" stroke="#6ba3f5" stroke-width="1"/>
-          <rect x="132" y="80" width="26" height="72" rx="3" fill="rgba(107,163,245,.1)" stroke="#6ba3f5" stroke-width="1"/>
-          <text x="110" y="165" text-anchor="middle" fill="#6ba3f5" font-size="7.5">STEAM GEN</text>
-          <!-- Core -->
-          <rect x="68" y="162" width="84" height="56" rx="5" fill="rgba(240,90,90,.12)" stroke="#f05a5a" stroke-width="1.2"/>
-          <text x="110" y="186" text-anchor="middle" fill="#f05a5a" font-size="8.5" font-weight="500">REACTOR CORE</text>
-          <text x="110" y="200" text-anchor="middle" fill="#f05a5a" font-size="7.5">37 fuel assemblies · 160 MWt</text>
-          <text x="110" y="213" text-anchor="middle" fill="#f05a5a" font-size="7.5">17×17 pin array · &lt;5% enrichment</text>
-          <!-- Labels -->
-          <text x="110" y="250" text-anchor="middle" fill="#1fd9b8" font-size="8" font-weight="500">One sealed vessel — no external piping</text>
+          <rect x="46" y="34" width="128" height="200" rx="20" fill="#13151f" stroke="rgba(31,217,184,.5)" stroke-width="1.3"/>
+          <text x="168" y="50" fill="#1fd9b8" font-size="6" opacity=".7">RPV</text>
+          <!-- Pressurizer dome at top -->
+          <rect x="68" y="42" width="84" height="26" rx="8" fill="rgba(31,217,184,.12)" stroke="#1fd9b8" stroke-width="1"/>
+          <text x="110" y="59" text-anchor="middle" fill="#1fd9b8" font-size="7.5" font-weight="500">PRESSURIZER</text>
+          <!-- Helical steam generator coils (drawn as actual coil pattern) -->
+          <path d="M62,74 Q68,70 74,74 Q80,78 86,74 Q92,70 98,74" fill="none" stroke="#6ba3f5" stroke-width="1.2" opacity=".8"/>
+          <path d="M62,82 Q68,78 74,82 Q80,86 86,82 Q92,78 98,82" fill="none" stroke="#6ba3f5" stroke-width="1.2" opacity=".8"/>
+          <path d="M62,90 Q68,86 74,90 Q80,94 86,90 Q92,86 98,90" fill="none" stroke="#6ba3f5" stroke-width="1.2" opacity=".8"/>
+          <path d="M62,98 Q68,94 74,98 Q80,102 86,98 Q92,94 98,98" fill="none" stroke="#6ba3f5" stroke-width="1.2" opacity=".8"/>
+          <path d="M62,106 Q68,102 74,106 Q80,110 86,106 Q92,102 98,106" fill="none" stroke="#6ba3f5" stroke-width="1.2" opacity=".8"/>
+          <path d="M122,74 Q128,70 134,74 Q140,78 146,74 Q152,70 158,74" fill="none" stroke="#6ba3f5" stroke-width="1.2" opacity=".8"/>
+          <path d="M122,82 Q128,78 134,82 Q140,86 146,82 Q152,78 158,82" fill="none" stroke="#6ba3f5" stroke-width="1.2" opacity=".8"/>
+          <path d="M122,90 Q128,86 134,90 Q140,94 146,90 Q152,86 158,90" fill="none" stroke="#6ba3f5" stroke-width="1.2" opacity=".8"/>
+          <path d="M122,98 Q128,94 134,98 Q140,102 146,98 Q152,94 158,98" fill="none" stroke="#6ba3f5" stroke-width="1.2" opacity=".8"/>
+          <path d="M122,106 Q128,102 134,106 Q140,110 146,106 Q152,102 158,106" fill="none" stroke="#6ba3f5" stroke-width="1.2" opacity=".8"/>
+          <rect x="58" y="70" width="44" height="42" rx="3" fill="rgba(107,163,245,.06)" stroke="#6ba3f5" stroke-width=".8" stroke-dasharray="3,2"/>
+          <rect x="118" y="70" width="44" height="42" rx="3" fill="rgba(107,163,245,.06)" stroke="#6ba3f5" stroke-width=".8" stroke-dasharray="3,2"/>
+          <text x="110" y="124" text-anchor="middle" fill="#6ba3f5" font-size="7">HELICAL STEAM GEN</text>
+          <!-- Hot riser (central column) -->
+          <rect x="100" y="70" width="20" height="84" rx="3" fill="rgba(240,90,90,.08)" stroke="#f05a5a" stroke-width=".8"/>
+          <text x="110" y="138" text-anchor="middle" fill="#f05a5a" font-size="6.5">HOT RISER</text>
+          <!-- Core with fuel assembly grid pattern -->
+          <rect x="60" y="148" width="100" height="68" rx="5" fill="rgba(240,90,90,.1)" stroke="#f05a5a" stroke-width="1.2"/>
+          <!-- fuel grid pattern -->
+          <line x1="72" y1="152" x2="72" y2="210" stroke="#f05a5a" stroke-width=".5" opacity=".3"/>
+          <line x1="84" y1="152" x2="84" y2="210" stroke="#f05a5a" stroke-width=".5" opacity=".3"/>
+          <line x1="96" y1="152" x2="96" y2="210" stroke="#f05a5a" stroke-width=".5" opacity=".3"/>
+          <line x1="108" y1="152" x2="108" y2="210" stroke="#f05a5a" stroke-width=".5" opacity=".3"/>
+          <line x1="120" y1="152" x2="120" y2="210" stroke="#f05a5a" stroke-width=".5" opacity=".3"/>
+          <line x1="132" y1="152" x2="132" y2="210" stroke="#f05a5a" stroke-width=".5" opacity=".3"/>
+          <line x1="144" y1="152" x2="144" y2="210" stroke="#f05a5a" stroke-width=".5" opacity=".3"/>
+          <line x1="64" y1="162" x2="156" y2="162" stroke="#f05a5a" stroke-width=".5" opacity=".3"/>
+          <line x1="64" y1="172" x2="156" y2="172" stroke="#f05a5a" stroke-width=".5" opacity=".3"/>
+          <line x1="64" y1="182" x2="156" y2="182" stroke="#f05a5a" stroke-width=".5" opacity=".3"/>
+          <line x1="64" y1="192" x2="156" y2="192" stroke="#f05a5a" stroke-width=".5" opacity=".3"/>
+          <line x1="64" y1="202" x2="156" y2="202" stroke="#f05a5a" stroke-width=".5" opacity=".3"/>
+          <text x="110" y="177" text-anchor="middle" fill="#f05a5a" font-size="8" font-weight="500">REACTOR CORE</text>
+          <text x="110" y="190" text-anchor="middle" fill="#f05a5a" font-size="6.5">37 fuel assemblies</text>
+          <text x="110" y="200" text-anchor="middle" fill="#f05a5a" font-size="6.5">17×17 pin · &lt;5% LEU</text>
 
-          <!-- Right: scaling -->
-          <text x="340" y="14" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600" letter-spacing=".08em">MODULAR SCALING</text>
-          <!-- ×1 -->
-          <rect x="240" y="22" width="26" height="72" rx="13" fill="rgba(31,217,184,.08)" stroke="#1fd9b8" stroke-width="1.2"/>
-          <text x="253" y="103" text-anchor="middle" fill="#7a7f9a" font-size="8">×1</text>
-          <text x="253" y="114" text-anchor="middle" fill="#7a7f9a" font-size="7.5">77 MW</text>
-          <!-- ×2 -->
-          <rect x="278" y="22" width="26" height="72" rx="13" fill="rgba(31,217,184,.08)" stroke="#1fd9b8" stroke-width="1.2"/>
-          <rect x="308" y="22" width="26" height="72" rx="13" fill="rgba(31,217,184,.08)" stroke="#1fd9b8" stroke-width="1.2"/>
-          <text x="307" y="103" text-anchor="middle" fill="#7a7f9a" font-size="8">×2</text>
-          <text x="307" y="114" text-anchor="middle" fill="#7a7f9a" font-size="7.5">154 MW</text>
-          <!-- ×6 highlighted -->
-          <rect x="345" y="14" width="110" height="88" rx="8" fill="rgba(31,217,184,.05)" stroke="rgba(31,217,184,.3)" stroke-width="1.2"/>
-          <rect x="352" y="22" width="26" height="72" rx="13" fill="rgba(31,217,184,.18)" stroke="#1fd9b8" stroke-width="1.5"/>
-          <rect x="384" y="22" width="26" height="72" rx="13" fill="rgba(31,217,184,.18)" stroke="#1fd9b8" stroke-width="1.5"/>
-          <text x="400" y="103" text-anchor="middle" fill="#1fd9b8" font-size="8.5" font-weight="600">×6</text>
-          <text x="400" y="115" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600">462 MW</text>
-          <text x="400" y="127" text-anchor="middle" fill="#7a7f9a" font-size="7.5">VOYGR-6 plant</text>
+          <!-- Dimension callouts -->
+          <!-- Height: 20m -->
+          <line x1="10" y1="34" x2="10" y2="234" stroke="#7a7f9a" stroke-width=".8"/>
+          <line x1="7" y1="34" x2="13" y2="34" stroke="#7a7f9a" stroke-width=".8"/>
+          <line x1="7" y1="234" x2="13" y2="234" stroke="#7a7f9a" stroke-width=".8"/>
+          <text x="10" y="140" text-anchor="middle" fill="#7a7f9a" font-size="7" font-weight="500" transform="rotate(-90,10,140)">20 m</text>
+          <!-- Diameter: 2.7m -->
+          <line x1="46" y1="260" x2="174" y2="260" stroke="#7a7f9a" stroke-width=".8"/>
+          <line x1="46" y1="257" x2="46" y2="263" stroke="#7a7f9a" stroke-width=".8"/>
+          <line x1="174" y1="257" x2="174" y2="263" stroke="#7a7f9a" stroke-width=".8"/>
+          <text x="110" y="268" text-anchor="middle" fill="#7a7f9a" font-size="7" font-weight="500">2.7 m dia</text>
 
-          <!-- Scale arrow -->
-          <line x1="253" y1="135" x2="400" y2="135" stroke="rgba(31,217,184,.2)" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#t)"/>
-          <text x="326" y="148" text-anchor="middle" fill="#3a3f58" font-size="7.5">Add modules as demand grows</text>
+          <!-- Right side: Regulatory Timeline + Scaling -->
+          <text x="345" y="12" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600" letter-spacing=".08em">REGULATORY TIMELINE</text>
+          <!-- Timeline vertical line -->
+          <line x1="252" y1="22" x2="252" y2="148" stroke="rgba(31,217,184,.3)" stroke-width="1.5"/>
+          <!-- 2002 -->
+          <circle cx="252" cy="28" r="3.5" fill="#13151f" stroke="#7a7f9a" stroke-width="1.2"/>
+          <text x="262" y="28" fill="#7a7f9a" font-size="7.5" font-weight="500">2002</text>
+          <text x="262" y="38" fill="#3a3f58" font-size="7">OSU research origin</text>
+          <!-- 2016 -->
+          <circle cx="252" cy="52" r="3.5" fill="#13151f" stroke="#7a7f9a" stroke-width="1.2"/>
+          <text x="262" y="52" fill="#7a7f9a" font-size="7.5" font-weight="500">2016</text>
+          <text x="262" y="62" fill="#3a3f58" font-size="7">DCA submitted to NRC</text>
+          <!-- 2020 -->
+          <circle cx="252" cy="78" r="3.5" fill="#13151f" stroke="#1fd9b8" stroke-width="1.5"/>
+          <text x="262" y="78" fill="#1fd9b8" font-size="7.5" font-weight="500">2020</text>
+          <text x="262" y="88" fill="#1fd9b8" font-size="7">Standard Design Approval ✓</text>
+          <!-- 2023 -->
+          <circle cx="252" cy="104" r="3.5" fill="#13151f" stroke="#1fd9b8" stroke-width="1.5"/>
+          <text x="262" y="104" fill="#1fd9b8" font-size="7.5" font-weight="500">2023</text>
+          <text x="262" y="114" fill="#1fd9b8" font-size="7">Design Certification (10 CFR 52) ✓</text>
+          <!-- 2025 -->
+          <circle cx="252" cy="130" r="4" fill="#1fd9b8" stroke="#08090f" stroke-width="1.5"/>
+          <text x="262" y="130" fill="#1fd9b8" font-size="7.5" font-weight="600">2025</text>
+          <text x="262" y="140" fill="#1fd9b8" font-size="7" font-weight="500">Uprated design approved ✓</text>
+          <rect x="238" y="145" width="210" height="12" rx="3" fill="rgba(31,217,184,.08)" stroke="rgba(31,217,184,.2)" stroke-width=".8"/>
+          <text x="343" y="154" text-anchor="middle" fill="#1fd9b8" font-size="7">First & only SMR with NRC design certification</text>
 
-          <!-- Key specs table -->
-          <rect x="240" y="158" width="210" height="98" rx="7" fill="#13151f" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
-          <text x="345" y="174" text-anchor="middle" fill="#7a7f9a" font-size="8" font-weight="600" letter-spacing=".08em">KEY SPECS</text>
-          <text x="250" y="190" fill="#3a3f58" font-size="8">Output</text><text x="445" y="190" text-anchor="end" fill="#1fd9b8" font-size="8">77 MWe / 250 MWt per module</text>
-          <text x="250" y="205" fill="#3a3f58" font-size="8">Vessel</text><text x="445" y="205" text-anchor="end" fill="#7a7f9a" font-size="8">20 m tall · 2.7 m dia</text>
-          <text x="250" y="220" fill="#3a3f58" font-size="8">Fuel cycle</text><text x="445" y="220" text-anchor="end" fill="#7a7f9a" font-size="8">Up to 21 months · &lt;5% enriched</text>
-          <text x="250" y="235" fill="#3a3f58" font-size="8">Capacity factor</text><text x="445" y="235" text-anchor="end" fill="#7a7f9a" font-size="8">≥95%</text>
-          <text x="250" y="250" fill="#3a3f58" font-size="8">NRC certification</text><text x="445" y="250" text-anchor="end" fill="#1fd9b8" font-size="8">2020 (only SMR) · uprated 2025</text>
+          <!-- Scaling diagram below timeline -->
+          <text x="345" y="174" text-anchor="middle" fill="#1fd9b8" font-size="8" font-weight="600" letter-spacing=".06em">MODULAR SCALING</text>
+          <!-- Shared reactor pool -->
+          <rect x="238" y="180" width="218" height="56" rx="6" fill="rgba(107,163,245,.05)" stroke="rgba(107,163,245,.15)" stroke-width="1"/>
+          <text x="240" y="192" fill="#6ba3f5" font-size="6" opacity=".7">shared reactor pool</text>
+          <!-- Modules in pool -->
+          <rect x="248" y="196" width="18" height="32" rx="9" fill="rgba(31,217,184,.15)" stroke="#1fd9b8" stroke-width="1.2"/>
+          <rect x="272" y="196" width="18" height="32" rx="9" fill="rgba(31,217,184,.15)" stroke="#1fd9b8" stroke-width="1.2"/>
+          <rect x="296" y="196" width="18" height="32" rx="9" fill="rgba(31,217,184,.15)" stroke="#1fd9b8" stroke-width="1.2"/>
+          <rect x="320" y="196" width="18" height="32" rx="9" fill="rgba(31,217,184,.15)" stroke="#1fd9b8" stroke-width="1.2"/>
+          <rect x="344" y="196" width="18" height="32" rx="9" fill="rgba(31,217,184,.15)" stroke="#1fd9b8" stroke-width="1.2"/>
+          <rect x="368" y="196" width="18" height="32" rx="9" fill="rgba(31,217,184,.15)" stroke="#1fd9b8" stroke-width="1.2"/>
+          <!-- dashed future modules -->
+          <rect x="392" y="196" width="18" height="32" rx="9" fill="rgba(31,217,184,.06)" stroke="#1fd9b8" stroke-width=".8" stroke-dasharray="3,2"/>
+          <rect x="416" y="196" width="18" height="32" rx="9" fill="rgba(31,217,184,.04)" stroke="#1fd9b8" stroke-width=".6" stroke-dasharray="3,2"/>
+          <text x="345" y="243" text-anchor="middle" fill="#1fd9b8" font-size="8" font-weight="500">×6 = 462 MWe (VOYGR-6)</text>
+          <text x="345" y="254" text-anchor="middle" fill="#7a7f9a" font-size="7">Up to ×12 = 924 MWe</text>
+
+          <!-- Key specs row -->
+          <rect x="238" y="258" width="218" height="10" rx="2" fill="rgba(31,217,184,.06)"/>
+          <text x="347" y="266" text-anchor="middle" fill="#3a3f58" font-size="6.5">77 MWe / module · 250 MWt · ≥95% capacity factor · 21-month fuel cycle</text>
         </svg>
       </div>
     </div>
@@ -747,64 +912,91 @@ kbd{display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(
       <!-- LCOE bar chart -->
       <div class="fig" style="flex:1">
         <div class="fig-lbl">Levelized Cost of Energy — LCOE ($/MWh) &nbsp;· Sources: IEA 2020, DOE/OSTI 2024, IEEFA 2024</div>
-        <svg viewBox="0 0 440 270" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif">
+        <svg viewBox="0 0 440 290" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif" preserveAspectRatio="xMidYMid meet">
+          <!-- Scale: y=220=$0, y=20=$200/MWh → $1 = 1px exactly -->
           <!-- Axes -->
           <line x1="60" y1="20" x2="60" y2="220" stroke="#3a3f58" stroke-width="1.2"/>
-          <line x1="60" y1="220" x2="420" y2="220" stroke="#3a3f58" stroke-width="1.2"/>
-          <!-- Grid (scale: 200$/MWh = 200px, 1$/MWh = 1px) -->
-          <line x1="60" y1="170" x2="420" y2="170" stroke="#1e2030" stroke-width="1"/>
-          <text x="50" y="174" text-anchor="end" fill="#3a3f58" font-size="8">50</text>
-          <line x1="60" y1="120" x2="420" y2="120" stroke="#1e2030" stroke-width="1"/>
-          <text x="50" y="124" text-anchor="end" fill="#3a3f58" font-size="8">100</text>
-          <line x1="60" y1="70"  x2="420" y2="70"  stroke="#1e2030" stroke-width="1"/>
-          <text x="50" y="74"  text-anchor="end" fill="#3a3f58" font-size="8">150</text>
-          <line x1="60" y1="20"  x2="420" y2="20"  stroke="#1e2030" stroke-width="1"/>
-          <text x="50" y="24"  text-anchor="end" fill="#3a3f58" font-size="8">200</text>
-          <!-- Y label -->
-          <text x="14" y="120" text-anchor="middle" fill="#3a3f58" font-size="8" transform="rotate(-90,14,120)">$/MWh</text>
+          <line x1="60" y1="220" x2="310" y2="220" stroke="#3a3f58" stroke-width="1.2"/>
+          <!-- Grid -->
+          <line x1="60" y1="170" x2="310" y2="170" stroke="#1e2030" stroke-width="1"/>
+          <text x="52" y="174" text-anchor="end" fill="#3a3f58" font-size="8">$50</text>
+          <line x1="60" y1="120" x2="310" y2="120" stroke="#1e2030" stroke-width="1"/>
+          <text x="52" y="124" text-anchor="end" fill="#3a3f58" font-size="8">$100</text>
+          <line x1="60" y1="70"  x2="310" y2="70"  stroke="#1e2030" stroke-width="1"/>
+          <text x="52" y="74"  text-anchor="end" fill="#3a3f58" font-size="8">$150</text>
+          <text x="52" y="224" text-anchor="end" fill="#3a3f58" font-size="8">$0</text>
+          <text x="14" y="120" text-anchor="middle" fill="#3a3f58" font-size="8" transform="rotate(-90,14,120)">LCOE ($/MWh)</text>
 
-          <!-- BAR 1: Solar $30-40 -->
-          <!-- bar: bottom=220, 30$/=30px height, midpoint at 35$ → top=185 -->
-          <rect x="90" y="183" width="60" height="37" rx="3" fill="#1fd9b8" opacity=".8"/>
-          <!-- range whisker: 30-40 → 190 to 180 -->
-          <line x1="120" y1="180" x2="120" y2="190" stroke="#1fd9b8" stroke-width="1.2"/>
-          <line x1="113" y1="180" x2="127" y2="180" stroke="#1fd9b8" stroke-width="1.5"/>
-          <line x1="113" y1="190" x2="127" y2="190" stroke="#1fd9b8" stroke-width="1.5"/>
-          <text x="120" y="236" text-anchor="middle" fill="#7a7f9a" font-size="9">Solar</text>
-          <text x="120" y="247" text-anchor="middle" fill="#7a7f9a" font-size="7.5">(utility-scale)</text>
-          <text x="120" y="175" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600">$30–40</text>
+          <!-- CCGT + carbon price reference line at ~$85/MWh -->
+          <line x1="60" y1="135" x2="310" y2="135" stroke="#f5b942" stroke-width="1" stroke-dasharray="6,3" opacity=".7"/>
+          <text x="312" y="133" fill="#f5b942" font-size="6.5">CCGT + $50/t CO₂</text>
+          <text x="312" y="141" fill="#f5b942" font-size="6.5">≈ $85/MWh</text>
 
-          <!-- BAR 2: SMR $65-90 HIGHLIGHTED -->
-          <rect x="185" y="130" width="60" height="90" rx="3" fill="#f05a5a" opacity=".7"/>
-          <line x1="215" y1="110" x2="215" y2="155" stroke="#f05a5a" stroke-width="1.2"/>
-          <line x1="208" y1="110" x2="222" y2="110" stroke="#f05a5a" stroke-width="1.5"/>
-          <line x1="208" y1="155" x2="222" y2="155" stroke="#f05a5a" stroke-width="1.5"/>
-          <rect x="180" y="105" width="70" height="125" rx="5" fill="none" stroke="#f05a5a" stroke-width="1.2" stroke-dasharray="4,3"/>
-          <text x="215" y="236" text-anchor="middle" fill="#f05a5a" font-size="9" font-weight="600">SMR</text>
-          <text x="215" y="247" text-anchor="middle" fill="#f05a5a" font-size="7.5">(NuScale)</text>
-          <text x="215" y="100" text-anchor="middle" fill="#f05a5a" font-size="9" font-weight="600">$65–90</text>
+          <!-- BAR 1: Solar $30-40 — midpoint $35, bar top at y=185 -->
+          <rect x="75" y="185" width="50" height="35" rx="3" fill="#1fd9b8" opacity=".8"/>
+          <line x1="100" y1="180" x2="100" y2="190" stroke="#eef0f8" stroke-width="1.2"/>
+          <line x1="93" y1="180" x2="107" y2="180" stroke="#eef0f8" stroke-width="1.2"/>
+          <line x1="93" y1="190" x2="107" y2="190" stroke="#eef0f8" stroke-width="1.2"/>
+          <text x="100" y="233" text-anchor="middle" fill="#7a7f9a" font-size="8">Solar</text>
+          <text x="100" y="243" text-anchor="middle" fill="#3a3f58" font-size="6.5">IEA 2020</text>
+          <text x="100" y="175" text-anchor="middle" fill="#1fd9b8" font-size="8.5" font-weight="600">$30–40</text>
 
-          <!-- BAR 3: Gas $70-100 -->
-          <rect x="280" y="120" width="60" height="100" rx="3" fill="#f5b942" opacity=".65"/>
-          <line x1="310" y1="110" x2="310" y2="150" stroke="#f5b942" stroke-width="1.2"/>
-          <line x1="303" y1="110" x2="317" y2="110" stroke="#f5b942" stroke-width="1.5"/>
-          <line x1="303" y1="150" x2="317" y2="150" stroke="#f5b942" stroke-width="1.5"/>
-          <text x="310" y="236" text-anchor="middle" fill="#7a7f9a" font-size="9">Gas CCGT</text>
-          <text x="310" y="247" text-anchor="middle" fill="#7a7f9a" font-size="7.5">(+ carbon price)</text>
-          <text x="310" y="105" text-anchor="middle" fill="#f5b942" font-size="9" font-weight="600">$70–100</text>
+          <!-- BAR 2: SMR $65-90 — midpoint $77, bar top at y=143 -->
+          <rect x="140" y="143" width="50" height="77" rx="3" fill="#f05a5a" opacity=".7"/>
+          <rect x="135" y="130" width="60" height="95" rx="5" fill="none" stroke="#f05a5a" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <line x1="165" y1="130" x2="165" y2="155" stroke="#eef0f8" stroke-width="1.2"/>
+          <line x1="158" y1="130" x2="172" y2="130" stroke="#eef0f8" stroke-width="1.2"/>
+          <line x1="158" y1="155" x2="172" y2="155" stroke="#eef0f8" stroke-width="1.2"/>
+          <text x="165" y="233" text-anchor="middle" fill="#f05a5a" font-size="8" font-weight="600">SMR</text>
+          <text x="165" y="243" text-anchor="middle" fill="#3a3f58" font-size="6.5">DOE 2024</text>
+          <text x="165" y="123" text-anchor="middle" fill="#f05a5a" font-size="8.5" font-weight="600">$65–90</text>
 
-          <!-- BAR 4: Conv Nuclear $90-140 -->
-          <rect x="363" y="80" width="45" height="140" rx="3" fill="#7a7f9a" opacity=".45"/>
-          <line x1="385" y1="60" x2="385" y2="130" stroke="#7a7f9a" stroke-width="1.2"/>
-          <line x1="378" y1="60" x2="392" y2="60" stroke="#7a7f9a" stroke-width="1.5"/>
-          <line x1="378" y1="130" x2="392" y2="130" stroke="#7a7f9a" stroke-width="1.5"/>
-          <text x="385" y="236" text-anchor="middle" fill="#7a7f9a" font-size="9">Conv.</text>
-          <text x="385" y="247" text-anchor="middle" fill="#7a7f9a" font-size="7.5">Nuclear</text>
-          <text x="385" y="55" text-anchor="middle" fill="#7a7f9a" font-size="9" font-weight="600">$90–140</text>
+          <!-- BAR 3: Gas CCGT $50-70 base — midpoint $60, bar top at y=160 -->
+          <rect x="205" y="160" width="50" height="60" rx="3" fill="#f5b942" opacity=".6"/>
+          <line x1="230" y1="150" x2="230" y2="170" stroke="#eef0f8" stroke-width="1.2"/>
+          <line x1="223" y1="150" x2="237" y2="150" stroke="#eef0f8" stroke-width="1.2"/>
+          <line x1="223" y1="170" x2="237" y2="170" stroke="#eef0f8" stroke-width="1.2"/>
+          <text x="230" y="233" text-anchor="middle" fill="#7a7f9a" font-size="8">Gas CCGT</text>
+          <text x="230" y="243" text-anchor="middle" fill="#3a3f58" font-size="6.5">IEA 2020</text>
+          <text x="230" y="145" text-anchor="middle" fill="#f5b942" font-size="8.5" font-weight="600">$50–70</text>
 
-          <!-- UAMPS note -->
-          <rect x="60" y="257" width="360" height="12" rx="3" fill="rgba(240,90,90,.07)" stroke="rgba(240,90,90,.2)" stroke-width=".8"/>
-          <text x="240" y="266" text-anchor="middle" fill="#f05a5a" font-size="7.5">⚠ UAMPS Idaho project cancelled 2023 — LCOE reached $89/MWh, subscribers withdrew</text>
+          <!-- BAR 4: Conv Nuclear $90-140 — midpoint $115, bar top at y=105 -->
+          <rect x="270" y="105" width="40" height="115" rx="3" fill="#7a7f9a" opacity=".4"/>
+          <line x1="290" y1="80" x2="290" y2="130" stroke="#eef0f8" stroke-width="1.2"/>
+          <line x1="283" y1="80" x2="297" y2="80" stroke="#eef0f8" stroke-width="1.2"/>
+          <line x1="283" y1="130" x2="297" y2="130" stroke="#eef0f8" stroke-width="1.2"/>
+          <text x="290" y="233" text-anchor="middle" fill="#7a7f9a" font-size="8">Conv. Nuc.</text>
+          <text x="290" y="243" text-anchor="middle" fill="#3a3f58" font-size="6.5">IEEFA 2024</text>
+          <text x="290" y="73" text-anchor="middle" fill="#7a7f9a" font-size="8.5" font-weight="600">$90–140</text>
+
+          <!-- UAMPS arrow pointing to SMR bar -->
+          <line x1="165" y1="252" x2="165" y2="230" stroke="#f05a5a" stroke-width="1" stroke-dasharray="3,2"/>
+          <polygon points="162,230 165,224 168,230" fill="#f05a5a" opacity=".7"/>
+          <rect x="68" y="252" width="204" height="12" rx="3" fill="rgba(240,90,90,.08)" stroke="rgba(240,90,90,.2)" stroke-width=".8"/>
+          <text x="170" y="261" text-anchor="middle" fill="#f05a5a" font-size="7">UAMPS cancelled 2023 — LCOE hit $89/MWh</text>
+
+          <!-- NTH-OF-A-KIND LEARNING CURVE INSET -->
+          <rect x="325" y="20" width="112" height="108" rx="6" fill="#13151f" stroke="rgba(31,217,184,.2)" stroke-width="1"/>
+          <text x="381" y="34" text-anchor="middle" fill="#1fd9b8" font-size="7.5" font-weight="600">NOAK LEARNING CURVE</text>
+          <!-- Mini axes -->
+          <line x1="340" y1="44" x2="340" y2="112" stroke="#3a3f58" stroke-width=".8"/>
+          <line x1="340" y1="112" x2="428" y2="112" stroke="#3a3f58" stroke-width=".8"/>
+          <text x="337" y="50" text-anchor="end" fill="#3a3f58" font-size="6">$90</text>
+          <text x="337" y="70" text-anchor="end" fill="#3a3f58" font-size="6">$65</text>
+          <text x="337" y="90" text-anchor="end" fill="#3a3f58" font-size="6">$45</text>
+          <text x="337" y="112" text-anchor="end" fill="#3a3f58" font-size="6">$30</text>
+          <text x="340" y="120" fill="#3a3f58" font-size="6">1st</text>
+          <text x="384" y="120" text-anchor="middle" fill="#3a3f58" font-size="6">10th</text>
+          <text x="424" y="120" text-anchor="end" fill="#3a3f58" font-size="6">20+</text>
+          <!-- FOAK range band -->
+          <rect x="342" y="47" width="16" height="23" rx="2" fill="rgba(240,90,90,.2)" stroke="#f05a5a" stroke-width=".8"/>
+          <text x="350" y="42" text-anchor="middle" fill="#f05a5a" font-size="6">FOAK</text>
+          <!-- Learning curve: declining from $77→$55→$45 -->
+          <path d="M350,56 Q370,62 384,72 Q400,80 410,86 Q420,90 426,92" fill="none" stroke="#1fd9b8" stroke-width="1.8"/>
+          <!-- Projected range band -->
+          <path d="M384,66 Q400,74 410,80 Q420,84 426,86 L426,98 Q420,96 410,92 Q400,86 384,78 Z" fill="rgba(31,217,184,.12)"/>
+          <text x="420" y="84" fill="#1fd9b8" font-size="6">$45–60</text>
+          <text x="381" y="128" text-anchor="middle" fill="#7a7f9a" font-size="6">10–15% reduction per doubling</text>
         </svg>
       </div>
     </div>
@@ -819,17 +1011,99 @@ kbd{display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(
     <div class="barriers">
       <div class="barrier">
         <div class="barrier-title">Regulatory</div>
-        <div class="barrier-body">NRC design certification exists — but <strong style="color:#eef0f8">project-level licensing</strong> remains slow and expensive. The regulatory framework was built for one-off large plants, not modular repeated deployments. Each new site still needs individual review.</div>
+        <div class="barrier-body">NRC design certification exists — but <strong style="color:#eef0f8">project-level licensing</strong> remains slow. Framework built for one-off large plants, not modular deployment.</div>
+        <!-- Gantt-style licensing timeline -->
+        <svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif" preserveAspectRatio="xMidYMid meet" style="width:100%;margin:.3rem 0">
+          <text x="100" y="10" text-anchor="middle" fill="#f5b942" font-size="7" font-weight="500">TYPICAL LICENSING TIMELINE</text>
+          <!-- time axis -->
+          <line x1="10" y1="70" x2="190" y2="70" stroke="#3a3f58" stroke-width=".8"/>
+          <text x="10" y="78" fill="#3a3f58" font-size="6">Yr 0</text>
+          <text x="55" y="78" fill="#3a3f58" font-size="6">Yr 3</text>
+          <text x="100" y="78" fill="#3a3f58" font-size="6">Yr 6</text>
+          <text x="145" y="78" fill="#3a3f58" font-size="6">Yr 9</text>
+          <text x="185" y="78" text-anchor="end" fill="#3a3f58" font-size="6">Yr 12+</text>
+          <!-- DCA submission bar -->
+          <rect x="10" y="16" width="55" height="10" rx="2" fill="rgba(245,185,66,.2)" stroke="#f5b942" stroke-width=".8"/>
+          <text x="37" y="24" text-anchor="middle" fill="#f5b942" font-size="6">DCA Review</text>
+          <!-- SDA bar -->
+          <rect x="65" y="16" width="35" height="10" rx="2" fill="rgba(245,185,66,.15)" stroke="#f5b942" stroke-width=".8"/>
+          <text x="82" y="24" text-anchor="middle" fill="#f5b942" font-size="5.5">SDA</text>
+          <!-- Design cert bar -->
+          <rect x="100" y="16" width="40" height="10" rx="2" fill="rgba(245,185,66,.12)" stroke="#f5b942" stroke-width=".8"/>
+          <text x="120" y="24" text-anchor="middle" fill="#f5b942" font-size="5.5">DC</text>
+          <!-- Project license bar -->
+          <rect x="10" y="34" width="90" height="10" rx="2" fill="rgba(240,90,90,.15)" stroke="#f05a5a" stroke-width=".8"/>
+          <text x="55" y="42" text-anchor="middle" fill="#f05a5a" font-size="6">Site-specific license (COL)</text>
+          <!-- Construction -->
+          <rect x="100" y="34" width="80" height="10" rx="2" fill="rgba(107,163,245,.15)" stroke="#6ba3f5" stroke-width=".8"/>
+          <text x="140" y="42" text-anchor="middle" fill="#6ba3f5" font-size="6">Construction</text>
+          <!-- total span label -->
+          <line x1="10" y1="52" x2="180" y2="52" stroke="#f05a5a" stroke-width=".8" stroke-dasharray="3,2"/>
+          <text x="100" y="60" text-anchor="middle" fill="#f05a5a" font-size="6.5" font-weight="500">~10–15 years total per site</text>
+        </svg>
         <div class="barrier-tag">Years per project · not designed for modularity</div>
       </div>
       <div class="barrier">
         <div class="barrier-title">Supply Chain</div>
-        <div class="barrier-body">The factory manufacturing model that makes SMRs attractive <strong style="color:#eef0f8">doesn't exist at scale yet</strong>. Cost advantages remain largely theoretical until sufficient orders exist to justify factory investment. FOAK costs carry the full learning burden.</div>
-        <div class="barrier-tag">~20% cost reduction per unit at scale (estimated)</div>
+        <div class="barrier-body">Factory model <strong style="color:#eef0f8">doesn't exist at scale yet</strong>. Cost advantages remain theoretical until orders justify factory investment.</div>
+        <!-- Factory break-even threshold -->
+        <svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif" preserveAspectRatio="xMidYMid meet" style="width:100%;margin:.3rem 0">
+          <text x="100" y="10" text-anchor="middle" fill="#f5b942" font-size="7" font-weight="500">FACTORY BREAK-EVEN THRESHOLD</text>
+          <!-- axes -->
+          <line x1="20" y1="18" x2="20" y2="62" stroke="#3a3f58" stroke-width=".8"/>
+          <line x1="20" y1="62" x2="190" y2="62" stroke="#3a3f58" stroke-width=".8"/>
+          <text x="17" y="24" text-anchor="end" fill="#3a3f58" font-size="5.5">High</text>
+          <text x="17" y="60" text-anchor="end" fill="#3a3f58" font-size="5.5">Low</text>
+          <text x="6" y="42" text-anchor="middle" fill="#3a3f58" font-size="5.5" transform="rotate(-90,6,42)">Cost/Unit</text>
+          <text x="105" y="72" text-anchor="middle" fill="#3a3f58" font-size="5.5">Cumulative Units Built</text>
+          <text x="30" y="72" fill="#3a3f58" font-size="5.5">1</text>
+          <text x="80" y="72" fill="#3a3f58" font-size="5.5">5</text>
+          <text x="130" y="72" fill="#3a3f58" font-size="5.5">10</text>
+          <text x="180" y="72" fill="#3a3f58" font-size="5.5">20+</text>
+          <!-- FOAK cost curve (declining) -->
+          <path d="M25,22 Q50,28 80,36 Q120,44 160,50 Q180,53 190,54" fill="none" stroke="#f05a5a" stroke-width="1.5"/>
+          <!-- break-even line -->
+          <line x1="20" y1="48" x2="190" y2="48" stroke="#1fd9b8" stroke-width="1" stroke-dasharray="4,3" opacity=".7"/>
+          <text x="192" y="47" fill="#1fd9b8" font-size="5.5">break-even</text>
+          <!-- intersection marker -->
+          <circle cx="120" cy="44" r="3" fill="#1fd9b8" stroke="#08090f" stroke-width="1"/>
+          <text x="120" y="40" text-anchor="middle" fill="#1fd9b8" font-size="6" font-weight="500">~8–10 units</text>
+          <!-- Shaded FOAK pain zone -->
+          <rect x="22" y="20" width="50" height="26" rx="3" fill="rgba(240,90,90,.08)"/>
+          <text x="47" y="32" text-anchor="middle" fill="#f05a5a" font-size="5.5">FOAK pain</text>
+        </svg>
+        <div class="barrier-tag">~10–15% cost reduction per doubling (estimated)</div>
       </div>
       <div class="barrier">
         <div class="barrier-title">Market Competition</div>
-        <div class="barrier-body">Solar and wind LCOE <strong style="color:#eef0f8">keeps falling</strong> while SMR costs stay flat. SMRs need nth-of-a-kind economics — where the 10th or 20th plant benefits from accumulated manufacturing learning — to close the gap.</div>
+        <div class="barrier-body">Solar/wind LCOE <strong style="color:#eef0f8">keeps falling</strong> while SMR costs stay flat. Need nth-of-a-kind economics to close the gap.</div>
+        <!-- LCOE competition chart -->
+        <svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif" preserveAspectRatio="xMidYMid meet" style="width:100%;margin:.3rem 0">
+          <text x="100" y="10" text-anchor="middle" fill="#f5b942" font-size="7" font-weight="500">LCOE TRAJECTORIES</text>
+          <!-- axes -->
+          <line x1="20" y1="16" x2="20" y2="62" stroke="#3a3f58" stroke-width=".8"/>
+          <line x1="20" y1="62" x2="190" y2="62" stroke="#3a3f58" stroke-width=".8"/>
+          <text x="17" y="22" text-anchor="end" fill="#3a3f58" font-size="5.5">$100</text>
+          <text x="17" y="42" text-anchor="end" fill="#3a3f58" font-size="5.5">$50</text>
+          <text x="17" y="60" text-anchor="end" fill="#3a3f58" font-size="5.5">$20</text>
+          <text x="25" y="72" fill="#3a3f58" font-size="5.5">2010</text>
+          <text x="70" y="72" fill="#3a3f58" font-size="5.5">2020</text>
+          <text x="120" y="72" fill="#3a3f58" font-size="5.5">2030</text>
+          <text x="170" y="72" fill="#3a3f58" font-size="5.5">2040</text>
+          <!-- Solar/wind curve: steep decline -->
+          <path d="M25,20 Q50,24 75,36 Q100,44 130,50 Q160,54 190,56" fill="none" stroke="#1fd9b8" stroke-width="1.5"/>
+          <text x="192" y="55" fill="#1fd9b8" font-size="5.5">Solar</text>
+          <!-- SMR flat line, potential dip -->
+          <path d="M25,32 L75,32 L120,32" fill="none" stroke="#f05a5a" stroke-width="1.5"/>
+          <path d="M120,32 Q150,34 170,38 Q185,42 190,44" fill="none" stroke="#f05a5a" stroke-width="1.2" stroke-dasharray="4,2"/>
+          <text x="192" y="44" fill="#f05a5a" font-size="5.5">SMR</text>
+          <!-- Gap shading -->
+          <path d="M75,36 Q100,44 130,50 Q160,54 190,56 L190,44 Q185,42 170,38 Q150,34 120,32 L75,32 Z" fill="rgba(240,90,90,.1)"/>
+          <text x="140" y="46" text-anchor="middle" fill="#f05a5a" font-size="6" font-weight="500" opacity=".8">Gap</text>
+          <!-- Today marker -->
+          <line x1="95" y1="16" x2="95" y2="62" stroke="#7a7f9a" stroke-width=".6" stroke-dasharray="2,2"/>
+          <text x="95" y="14" text-anchor="middle" fill="#7a7f9a" font-size="5.5">Today</text>
+        </svg>
         <div class="barrier-tag">Solar: $30–40/MWh and falling · SMR: $65–90/MWh flat</div>
       </div>
     </div>
@@ -855,34 +1129,34 @@ kbd{display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(
     <div class="col-r">
       <!-- 2x2 matrix -->
       <div class="matrix-wrap" style="position:relative;flex:1">
-        <div style="position:absolute;left:-1.4rem;top:0;bottom:2rem;display:flex;flex-direction:column;justify-content:space-between;align-items:center;">
-          <span style="font-size:.6rem;color:#1fd9b8;letter-spacing:.08em;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg)">Low-carbon</span>
-          <span style="font-size:.6rem;color:#f5b942;letter-spacing:.08em;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg)">High-carbon</span>
+        <!-- Y-axis with arrow -->
+        <div style="position:absolute;left:-1.8rem;top:0;bottom:2rem;display:flex;flex-direction:column;justify-content:space-between;align-items:center;">
+          <span style="font-size:.6rem;color:#1fd9b8;letter-spacing:.08em;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg)">Low-carbon ▲</span>
+          <span style="font-size:.6rem;color:#f5b942;letter-spacing:.08em;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg)">High-carbon ▼</span>
         </div>
         <div class="matrix">
           <div class="quad">
-            <div style="font-size:1.2rem;opacity:.6">☀️</div>
             <div class="quad-name" style="color:#1fd9b8;font-size:clamp(.85rem,1.2vw,.95rem)">Solar / Wind</div>
             <div class="quad-sub">Low cost · variable output · intermittent</div>
           </div>
           <div class="quad hl">
-            <div style="font-size:1.2rem;opacity:.8">⚛</div>
-            <div class="quad-name">SMRs</div>
-            <div class="quad-sub" style="color:#1fd9b8;font-size:.7rem">Firm · dispatchable · low-carbon baseload</div>
+            <div class="quad-name" style="font-size:clamp(1.1rem,1.8vw,1.35rem)">SMRs</div>
+            <div class="quad-sub" style="color:#1fd9b8;font-size:.72rem;font-weight:500">Firm · dispatchable · low-carbon baseload</div>
+            <div class="quad-sub" style="color:#1fd9b8;font-size:.62rem;margin-top:.15rem;line-height:1.3">Only dispatchable low-carbon source at this scale today</div>
           </div>
-          <div class="quad" style="opacity:.5">
-            <div class="quad-name" style="color:#3a3f58;font-size:.85rem">—</div>
-            <div class="quad-sub">No major source occupies this quadrant</div>
+          <div class="quad" style="opacity:.4">
+            <div class="quad-name" style="color:#3a3f58;font-size:.8rem">—</div>
+            <div class="quad-sub" style="color:#3a3f58;font-size:.6rem">No viable source</div>
           </div>
           <div class="quad">
-            <div style="font-size:1.2rem;opacity:.6">🏭</div>
             <div class="quad-name" style="color:#f5b942;font-size:clamp(.85rem,1.2vw,.95rem)">Gas / Coal</div>
             <div class="quad-sub">Reliable · high-carbon · dispatchable</div>
           </div>
         </div>
+        <!-- X-axis with arrows -->
         <div style="display:flex;justify-content:space-between;padding:0 .2rem;margin-top:.4rem">
-          <span style="font-size:.6rem;color:#3a3f58;letter-spacing:.08em;text-transform:uppercase">Intermittent</span>
-          <span style="font-size:.6rem;color:#3a3f58;letter-spacing:.08em;text-transform:uppercase">Dispatchable</span>
+          <span style="font-size:.6rem;color:#3a3f58;letter-spacing:.08em;text-transform:uppercase">◄ Intermittent</span>
+          <span style="font-size:.6rem;color:#3a3f58;letter-spacing:.08em;text-transform:uppercase">Dispatchable ►</span>
         </div>
       </div>
     </div>
