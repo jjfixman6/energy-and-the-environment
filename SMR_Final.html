@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Small Modular Reactors — NuScale</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,700;1,300&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#08090f;
+  --surface:#0f1018;
+  --card:#13151f;
+  --border:rgba(255,255,255,0.06);
+  --border2:rgba(255,255,255,0.11);
+  --white:#eef0f8;
+  --grey:#7a7f9a;
+  --dim:#3a3f58;
+  --teal:#1fd9b8;
+  --teal-soft:rgba(31,217,184,0.12);
+  --teal-border:rgba(31,217,184,0.25);
+  --amber:#f5b942;
+  --red:#f05a5a;
+  --blue:#6ba3f5;
+}
+
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:'Outfit',sans-serif;color:var(--white);-webkit-font-smoothing:antialiased}
+
+/* ── DECK ── */
+.deck{width:100vw;height:100vh;position:relative}
+
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  padding:4vh 5.5vw 3vh;
+  opacity:0;visibility:hidden;
+  transition:opacity .38s ease,transform .38s ease;
+  transform:translateX(32px);
+  overflow:hidden;
+}
+.slide.active{opacity:1;visibility:visible;transform:translateX(0)}
+
+/* dot-grid bg */
+.slide::after{
+  content:'';position:absolute;inset:0;
+  background-image:radial-gradient(rgba(255,255,255,0.04) 1px,transparent 1px);
+  background-size:28px 28px;pointer-events:none;z-index:0;
+}
+.slide>*{position:relative;z-index:1}
+
+/* top rule */
+.slide::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--teal) 0%,var(--blue) 55%,transparent 100%);
+  z-index:10;
+}
+
+/* ── TITLE SLIDE ── */
+.s-title{
+  justify-content:center;align-items:flex-start;
+  padding:0 8vw;
+  background:var(--bg);
+}
+.s-title .kicker{
+  font-family:'Outfit',sans-serif;font-size:.72rem;font-weight:600;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--teal);
+  margin-bottom:1.8rem;
+}
+.s-title h1{
+  font-family:'Fraunces',serif;font-size:clamp(3.2rem,7.5vw,6.2rem);
+  font-weight:300;line-height:1.0;letter-spacing:-.02em;color:var(--white);
+  max-width:12ch;
+}
+.s-title h1 em{font-style:italic;color:var(--teal)}
+.s-title .sub{
+  margin-top:1.6rem;font-size:clamp(.95rem,1.6vw,1.2rem);
+  color:var(--grey);font-weight:300;
+}
+.s-title .meta{margin-top:3rem;font-size:.8rem;color:var(--dim);letter-spacing:.04em}
+.title-orb{
+  position:absolute;right:-5vw;top:50%;transform:translateY(-50%);
+  width:45vw;height:45vw;max-width:580px;max-height:580px;
+  border-radius:50%;
+  border:1px solid rgba(31,217,184,.08);
+  background:radial-gradient(circle at 35% 35%,rgba(31,217,184,.06) 0%,transparent 65%);
+  pointer-events:none;z-index:0;
+}
+.title-orb::before{
+  content:'';position:absolute;inset:15%;border-radius:50%;
+  border:1px solid rgba(31,217,184,.05);
+}
+
+/* ── HEADER ── */
+.hd{display:flex;align-items:baseline;gap:.9rem;margin-bottom:2.2vh;flex-shrink:0}
+.num{
+  font-family:'Outfit',sans-serif;font-size:.62rem;font-weight:600;
+  color:var(--teal);letter-spacing:.16em;
+  background:var(--teal-soft);border:1px solid var(--teal-border);
+  padding:.22em .65em;border-radius:3px;white-space:nowrap;
+}
+h2.ttl{
+  font-family:'Fraunces',serif;font-size:clamp(1.6rem,2.8vw,2.4rem);
+  font-weight:400;letter-spacing:-.015em;line-height:1.1;color:var(--white);
+}
+
+/* ── BODY ── */
+.body{flex:1;display:flex;gap:3vw;align-items:stretch;min-height:0}
+.col-l{flex:0 0 38%;display:flex;flex-direction:column;gap:.9rem;justify-content:center}
+.col-r{flex:1;display:flex;flex-direction:column;gap:.8rem;min-width:0;justify-content:center}
+
+/* ── BULLETS ── */
+.bullets{list-style:none;display:flex;flex-direction:column;gap:.75rem}
+.bullets li{
+  font-size:clamp(.85rem,1.35vw,1.08rem);font-weight:400;
+  color:var(--grey);line-height:1.55;
+  padding-left:1.2em;position:relative;
+  transition:opacity .3s ease,transform .3s ease;
+}
+.bullets li::before{content:'▸';position:absolute;left:0;color:var(--teal);font-size:.85em;top:.1em}
+.bullets li.hidden{opacity:0;transform:translateX(-8px);pointer-events:none}
+.hi{color:var(--teal);font-weight:500}
+.warn{color:var(--amber);font-weight:500}
+.bad{color:var(--red);font-weight:500}
+
+/* ── CALLOUT ── */
+.callout{
+  font-size:clamp(.75rem,1.05vw,.9rem);color:var(--teal);
+  border-left:2px solid var(--teal);padding:.5em .8em;
+  background:var(--teal-soft);border-radius:0 4px 4px 0;line-height:1.5;
+  margin-top:.2rem;
+}
+
+/* ── CARDS / FIGURE BOXES ── */
+.fig{
+  background:var(--card);border-radius:8px;padding:.8rem;
+  border:1px solid var(--border);overflow:hidden;
+}
+.fig-lbl{
+  font-size:.58rem;text-transform:uppercase;letter-spacing:.14em;
+  color:var(--dim);margin-bottom:.55rem;font-weight:600;
+}
+.fig img{width:100%;border-radius:4px;display:block;background:#fff}
+.fig .cap{font-size:.6rem;color:var(--dim);margin-top:.4rem;text-align:center;line-height:1.4}
+
+/* ── STAT ROW ── */
+.stats{display:grid;gap:.55rem}
+.stats.col3{grid-template-columns:repeat(3,1fr)}
+.stats.col2{grid-template-columns:repeat(2,1fr)}
+.stat{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:7px;padding:.65rem .75rem;text-align:center;
+}
+.stat-v{font-family:'Fraunces',serif;font-size:clamp(1.1rem,1.8vw,1.5rem);font-weight:400;color:var(--teal)}
+.stat-l{font-size:.62rem;color:var(--dim);margin-top:.15rem;line-height:1.3}
+
+/* ── EQUATION BOX ── */
+.eq-box{
+  background:var(--card);border-radius:8px;padding:.8rem 1rem;
+  border:1px solid var(--teal-border);
+}
+.eq-lbl{font-size:.58rem;text-transform:uppercase;letter-spacing:.14em;color:var(--dim);margin-bottom:.4rem;font-weight:600}
+.eq{font-family:'Georgia',serif;font-size:clamp(.85rem,1.2vw,1rem);color:var(--teal);line-height:2}
+.eq-note{font-size:.68rem;color:var(--dim);margin-top:.25rem;line-height:1.4}
+
+/* ── COMPARISON BANDS ── */
+.comp{display:flex;flex-direction:column;gap:.5rem}
+.comp-row{display:flex;align-items:center;gap:.8rem}
+.comp-lbl{font-size:.72rem;color:var(--grey);width:90px;flex-shrink:0;text-align:right}
+.comp-bar-wrap{flex:1;height:22px;background:var(--surface);border-radius:3px;overflow:hidden;position:relative}
+.comp-bar{height:100%;border-radius:3px;transition:width .5s ease}
+.comp-val{font-size:.72rem;color:var(--grey);width:70px;flex-shrink:0}
+
+/* ── PROCESS FLOW ── */
+.flow{display:flex;flex-direction:column;gap:.4rem}
+.flow-step{
+  display:flex;align-items:flex-start;gap:.75rem;
+  background:var(--card);border-radius:6px;padding:.6rem .85rem;
+  border-left:2px solid var(--border2);
+}
+.flow-step.red{border-left-color:var(--red)}
+.flow-step.blue{border-left-color:var(--blue)}
+.flow-step.teal{border-left-color:var(--teal)}
+.flow-step.amber{border-left-color:var(--amber)}
+.flow-n{font-size:.6rem;font-weight:600;color:var(--dim);min-width:16px;padding-top:.1em}
+.flow-step.red .flow-n{color:var(--red)}
+.flow-step.blue .flow-n{color:var(--blue)}
+.flow-step.teal .flow-n{color:var(--teal)}
+.flow-step.amber .flow-n{color:var(--amber)}
+.flow-txt{font-size:clamp(.75rem,1.1vw,.88rem);color:var(--grey);line-height:1.45}
+.flow-txt strong{color:var(--white);font-weight:500}
+
+/* ── BARRIER COLS ── */
+.barriers{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;flex:1}
+.barrier{
+  background:var(--card);border-radius:8px;padding:1rem;
+  border:1px solid var(--border);display:flex;flex-direction:column;gap:.6rem;
+}
+.barrier-title{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--amber)}
+.barrier-body{font-size:clamp(.72rem,1vw,.85rem);color:var(--grey);line-height:1.55;flex:1}
+.barrier-tag{
+  font-size:.62rem;background:rgba(245,185,66,.1);border:1px solid rgba(245,185,66,.2);
+  color:var(--amber);padding:.2em .55em;border-radius:3px;align-self:flex-start;
+}
+
+/* ── 2×2 MATRIX ── */
+.matrix-wrap{position:relative;flex:1;min-height:0}
+.matrix{
+  display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;
+  gap:6px;height:100%;min-height:200px;
+}
+.quad{
+  background:var(--card);border-radius:7px;border:1px solid var(--border);
+  padding:.8rem;display:flex;flex-direction:column;justify-content:center;align-items:center;
+  text-align:center;gap:.4rem;
+}
+.quad.hl{border-color:var(--teal-border);background:rgba(31,217,184,.07)}
+.quad-name{font-size:clamp(.85rem,1.3vw,1rem);font-weight:500;color:var(--teal)}
+.quad.hl .quad-name{font-size:clamp(1rem,1.6vw,1.25rem)}
+.quad-sub{font-size:.65rem;color:var(--dim);line-height:1.4}
+.quad-icon{font-size:1.4rem;opacity:.6}
+.ax-x{
+  display:flex;justify-content:space-between;
+  padding:0 0 0 0;margin-top:.4rem;
+}
+.ax-x span,.ax-y span{font-size:.62rem;color:var(--dim);letter-spacing:.06em;text-transform:uppercase}
+.ax-y{
+  position:absolute;left:-1.6rem;top:0;bottom:0;
+  display:flex;flex-direction:column;justify-content:space-between;align-items:center;
+}
+
+/* ── REFS ── */
+.refs-grid{display:grid;grid-template-columns:1fr 1fr;gap:.4em 3vw;margin-top:.4em}
+.refs-grid ol{list-style:decimal;padding-left:1.4em}
+.refs-grid li{font-size:clamp(.54rem,.82vw,.74rem);color:var(--grey);line-height:1.4;margin-bottom:.38em}
+.refs-grid .src{color:var(--teal);font-size:.88em}
+
+/* ── PROGRESS ── */
+.progress{position:fixed;bottom:0;left:0;height:2px;background:var(--teal);transition:width .4s ease;z-index:100}
+
+/* ── NOTES ── */
+.notes-panel{
+  position:fixed;bottom:0;left:0;right:0;max-height:0;overflow:hidden;
+  background:rgba(4,5,10,.97);backdrop-filter:blur(12px);
+  border-top:1px solid var(--teal-border);transition:max-height .35s ease;z-index:200;
+}
+.notes-panel.open{max-height:38vh}
+.notes-content{padding:1.4em 5.5vw;font-size:clamp(.8rem,1.1vw,.9rem);color:var(--grey);line-height:1.75;max-height:36vh;overflow-y:auto}
+.notes-lbl{font-size:.6rem;text-transform:uppercase;letter-spacing:.15em;color:var(--teal);margin-bottom:.45em;font-weight:600}
+
+/* ── HELP ── */
+.help{position:fixed;bottom:2.5vh;right:5vw;font-size:.68rem;color:var(--dim);z-index:50;transition:opacity 3s ease}
+.help.fade{opacity:0}
+kbd{display:inline-block;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:3px;padding:.1em .4em;font-size:.85em;margin:0 .1em}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+<!-- ══ SLIDE 0: TITLE ══ -->
+<div class="slide s-title active"
+  data-notes="Introduce yourself and the topic. This presentation covers the engineering basis of SMRs, why NuScale is the world leader, and an honest assessment of the economics.">
+  <div class="title-orb"></div>
+  <p class="kicker">Energy and the Environment &nbsp;·&nbsp; Joshua Fixman</p>
+  <h1>Small<br>Modular<br><em>Reactors</em></h1>
+  <p class="sub">Engineering, Economics, and the Case for NuScale</p>
+  <p class="meta">Professor Lovejoy</p>
+</div>
+
+<!-- ══ SLIDE 1: BASELOAD PROBLEM ══ -->
+<div class="slide"
+  data-notes="By 2050, global electricity demand is projected to double. Renewables are essential but intermittent — solar and wind cannot guarantee power at 2am in January. Conventional nuclear can, but at 20 to 30 billion dollars a plant and 15 or more years to build. The question: can we get nuclear reliability without that cost and complexity?">
+  <div class="hd"><span class="num">01</span><h2 class="ttl">The Baseload Problem</h2></div>
+  <div class="body">
+    <div class="col-l">
+      <ul class="bullets">
+        <li>Global electricity demand <span class="hi">doubles by 2050</span> — and must decarbonize simultaneously</li>
+        <li>Solar and wind are <span class="warn">intermittent</span> — cannot guarantee power at 2am in January</li>
+        <li>Conventional nuclear is <span class="hi">firm and dispatchable</span> — but costs <span class="bad">$20–30B</span> and takes 15+ years</li>
+        <li>The grid needs something <span class="hi">reliable, low-carbon, and buildable</span></li>
+      </ul>
+      <div class="callout">Can we get nuclear reliability without the cost and complexity?</div>
+    </div>
+    <div class="col-r">
+      <div class="fig">
+        <div class="fig-lbl">Renewables vs. Nuclear — Output Profile</div>
+        <svg viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif">
+          <defs>
+            <linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#f5b942" stop-opacity=".25"/>
+              <stop offset="100%" stop-color="#f5b942" stop-opacity="0"/>
+            </linearGradient>
+            <linearGradient id="ng" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#1fd9b8" stop-opacity=".18"/>
+              <stop offset="100%" stop-color="#1fd9b8" stop-opacity=".02"/>
+            </linearGradient>
+          </defs>
+          <!-- panels -->
+          <rect x="0" y="0" width="235" height="200" rx="6" fill="#13151f" stroke="rgba(245,185,66,.15)" stroke-width="1"/>
+          <rect x="265" y="0" width="235" height="200" rx="6" fill="#13151f" stroke="rgba(31,217,184,.15)" stroke-width="1"/>
+          <!-- labels -->
+          <text x="117" y="18" text-anchor="middle" fill="#f5b942" font-size="10" font-weight="600" letter-spacing=".08em">RENEWABLES</text>
+          <text x="382" y="18" text-anchor="middle" fill="#1fd9b8" font-size="10" font-weight="600" letter-spacing=".08em">NUCLEAR BASELOAD</text>
+          <!-- axes -->
+          <line x1="22" y1="32" x2="22" y2="168" stroke="#3a3f58" stroke-width="1"/>
+          <line x1="22" y1="168" x2="225" y2="168" stroke="#3a3f58" stroke-width="1"/>
+          <line x1="287" y1="32" x2="287" y2="168" stroke="#3a3f58" stroke-width="1"/>
+          <line x1="287" y1="168" x2="490" y2="168" stroke="#3a3f58" stroke-width="1"/>
+          <!-- gridlines -->
+          <line x1="22" y1="100" x2="225" y2="100" stroke="#1e2030" stroke-width="1"/>
+          <line x1="287" y1="100" x2="490" y2="100" stroke="#1e2030" stroke-width="1"/>
+          <!-- time labels -->
+          <text x="22"  y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">12am</text>
+          <text x="75"  y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">6am</text>
+          <text x="124" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">12pm</text>
+          <text x="174" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">6pm</text>
+          <text x="225" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">12am</text>
+          <text x="287" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">12am</text>
+          <text x="340" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">6am</text>
+          <text x="390" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">12pm</text>
+          <text x="440" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">6pm</text>
+          <text x="490" y="180" text-anchor="middle" fill="#3a3f58" font-size="7.5">12am</text>
+          <!-- solar curve + fill -->
+          <path d="M22,166 L45,162 L65,152 L80,138 L95,112 L110,82 L124,58 L135,48 L148,56 L162,80 L178,110 L193,140 L210,160 L225,166"
+            fill="url(#sg)" stroke="#f5b942" stroke-width="2" stroke-linejoin="round"/>
+          <!-- zero annotations -->
+          <rect x="26" y="153" width="32" height="11" rx="2" fill="rgba(240,90,90,.1)" stroke="rgba(240,90,90,.25)" stroke-width=".8"/>
+          <text x="42" y="161.5" text-anchor="middle" fill="#f05a5a" font-size="7">≈ 0 MW</text>
+          <rect x="189" y="153" width="32" height="11" rx="2" fill="rgba(240,90,90,.1)" stroke="rgba(240,90,90,.25)" stroke-width=".8"/>
+          <text x="205" y="161.5" text-anchor="middle" fill="#f05a5a" font-size="7">≈ 0 MW</text>
+          <!-- peak -->
+          <line x1="135" y1="48" x2="152" y2="36" stroke="#f5b942" stroke-width=".8" stroke-dasharray="3,2"/>
+          <text x="155" y="34" fill="#f5b942" font-size="7.5" font-weight="500">Peak</text>
+          <!-- nuclear flat -->
+          <path d="M287,90 L490,90" fill="none" stroke="#1fd9b8" stroke-width="2.5"/>
+          <path d="M287,90 L490,90 L490,168 L287,168 Z" fill="url(#ng)"/>
+          <!-- 24/7 badge -->
+          <rect x="348" y="78" width="72" height="13" rx="3" fill="rgba(31,217,184,.1)" stroke="rgba(31,217,184,.25)" stroke-width=".8"/>
+          <text x="384" y="87.5" text-anchor="middle" fill="#1fd9b8" font-size="8" font-weight="600">24 / 7 / 365</text>
+          <!-- 2am label nuclear -->
+          <text x="382" y="197" text-anchor="middle" fill="#1fd9b8" font-size="7.5">2am in January → full power</text>
+          <text x="117" y="197" text-anchor="middle" fill="#f05a5a" font-size="7.5">2am in January → zero</text>
+        </svg>
+      </div>
+      <div class="stats col3">
+        <div class="stat"><div class="stat-v">2×</div><div class="stat-l">Demand growth by 2050 (IEA WEO 2024)</div></div>
+        <div class="stat"><div class="stat-v">$20–30B</div><div class="stat-l">Typical conventional nuclear plant cost</div></div>
+        <div class="stat"><div class="stat-v">15+ yrs</div><div class="stat-l">Average build time, conventional nuclear</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 2: MANUFACTURING MODEL ══ -->
+<div class="slide"
+  data-notes="SMRs aren't just smaller reactors — they're a different manufacturing model. A conventional plant is over 1,000 MW, custom-built entirely on site. An SMR is under 300 MW, factory-built, shipped, and assembled. Factory production means standardized components, tighter quality control, and learning-curve cost reductions — the same logic that transformed aerospace and shipbuilding. Critically, you don't commit twenty billion dollars upfront. You deploy incrementally, matching capacity to demand.">
+  <div class="hd"><span class="num">02</span><h2 class="ttl">A New Manufacturing Model</h2></div>
+  <div class="body">
+    <div class="col-l">
+      <ul class="bullets">
+        <li><span class="bad">Conventional:</span> 1,000+ MW · fully custom · built entirely on site</li>
+        <li><span class="hi">SMR:</span> &lt;300 MW · factory-fabricated · shipped in segments · assembled on site</li>
+        <li>Factory production → <span class="hi">standardized components</span>, tighter QC, learning-curve savings</li>
+        <li>Deploy <span class="hi">incrementally</span> — no $20B upfront commitment · scale with demand</li>
+      </ul>
+      <div class="callout">Same logic that transformed aerospace and shipbuilding</div>
+      <div class="stats col2" style="margin-top:.2rem">
+        <div class="stat"><div class="stat-v">&lt;300 MW</div><div class="stat-l">Per SMR module (vs 1,000+ MW conventional)</div></div>
+        <div class="stat"><div class="stat-v">~700 t</div><div class="stat-l">NuScale module shipped in 3 segments by truck, rail, or barge</div></div>
+      </div>
+    </div>
+    <div class="col-r">
+      <!-- Comparison diagram: conventional vs SMR -->
+      <div class="fig">
+        <div class="fig-lbl">Construction paradigm comparison</div>
+        <svg viewBox="0 0 480 260" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif">
+          <!-- TOP: Conventional -->
+          <text x="240" y="16" text-anchor="middle" fill="#f05a5a" font-size="9.5" font-weight="600" letter-spacing=".1em">CONVENTIONAL</text>
+          <rect x="40" y="24" width="400" height="72" rx="7" fill="#13151f" stroke="rgba(240,90,90,.2)" stroke-width="1"/>
+          <!-- buildings dashed -->
+          <rect x="70"  y="34" width="55" height="52" rx="3" fill="rgba(240,90,90,.05)" stroke="#f05a5a" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <rect x="136" y="42" width="50" height="44" rx="3" fill="rgba(240,90,90,.05)" stroke="#f05a5a" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <rect x="198" y="30" width="68" height="56" rx="3" fill="rgba(240,90,90,.05)" stroke="#f05a5a" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <!-- crane -->
+          <line x1="284" y1="30" x2="284" y2="20" stroke="#f05a5a" stroke-width="1.8"/>
+          <line x1="274" y1="20" x2="318" y2="20" stroke="#f05a5a" stroke-width="1.8"/>
+          <line x1="310" y1="20" x2="310" y2="36" stroke="#f05a5a" stroke-width="1.2" stroke-dasharray="3,2"/>
+          <!-- tags -->
+          <text x="97"  y="96" text-anchor="middle" fill="#f05a5a" font-size="8.5">On-site only</text>
+          <text x="161" y="96" text-anchor="middle" fill="#7a7f9a" font-size="8.5">15+ yrs</text>
+          <text x="232" y="96" text-anchor="middle" fill="#f05a5a" font-size="8.5">$20–30B</text>
+          <text x="310" y="96" text-anchor="middle" fill="#7a7f9a" font-size="8.5">1,000+ MW</text>
+
+          <!-- DIVIDER -->
+          <line x1="30" y1="108" x2="450" y2="108" stroke="#1e2030" stroke-width="1"/>
+          <text x="240" y="122" text-anchor="middle" fill="#3a3f58" font-size="10" font-weight="600">vs</text>
+
+          <!-- BOTTOM: SMR flow -->
+          <text x="240" y="138" text-anchor="middle" fill="#1fd9b8" font-size="9.5" font-weight="600" letter-spacing=".1em">SMALL MODULAR REACTOR</text>
+
+          <!-- Step 1: Factory -->
+          <rect x="12" y="146" width="110" height="62" rx="7" fill="#13151f" stroke="rgba(31,217,184,.3)" stroke-width="1.2"/>
+          <text x="67" y="163" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600">FACTORY</text>
+          <rect x="28" y="168" width="78" height="28" rx="3" fill="rgba(31,217,184,.05)"/>
+          <line x1="42" y1="168" x2="42" y2="196" stroke="rgba(31,217,184,.25)" stroke-width="1"/>
+          <line x1="56" y1="168" x2="56" y2="196" stroke="rgba(31,217,184,.25)" stroke-width="1"/>
+          <line x1="70" y1="168" x2="70" y2="196" stroke="rgba(31,217,184,.25)" stroke-width="1"/>
+          <line x1="84" y1="168" x2="84" y2="196" stroke="rgba(31,217,184,.25)" stroke-width="1"/>
+          <text x="67" y="218" text-anchor="middle" fill="#3a3f58" font-size="8">Controlled QC</text>
+
+          <!-- Arrow 1 -->
+          <line x1="124" y1="177" x2="143" y2="177" stroke="#1fd9b8" stroke-width="1.5"/>
+          <polygon points="143,173 151,177 143,181" fill="#1fd9b8"/>
+          <text x="137" y="191" text-anchor="middle" fill="#3a3f58" font-size="7.5">Ship</text>
+
+          <!-- Step 2: Module -->
+          <rect x="153" y="146" width="110" height="62" rx="7" fill="#13151f" stroke="rgba(31,217,184,.3)" stroke-width="1.2"/>
+          <text x="208" y="163" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600">MODULE</text>
+          <rect x="183" y="170" width="50" height="26" rx="13" fill="rgba(31,217,184,.1)" stroke="#1fd9b8" stroke-width="1.4"/>
+          <rect x="196" y="177" width="8" height="12" rx="2" fill="#1fd9b8" opacity=".4"/>
+          <rect x="210" y="177" width="8" height="12" rx="2" fill="#1fd9b8" opacity=".4"/>
+          <text x="208" y="218" text-anchor="middle" fill="#3a3f58" font-size="8">&lt;300 MW each</text>
+
+          <!-- Arrow 2 -->
+          <line x1="265" y1="177" x2="284" y2="177" stroke="#1fd9b8" stroke-width="1.5"/>
+          <polygon points="284,173 292,177 284,181" fill="#1fd9b8"/>
+          <text x="278" y="191" text-anchor="middle" fill="#3a3f58" font-size="7.5">Stack</text>
+
+          <!-- Step 3: Plant -->
+          <rect x="294" y="146" width="174" height="62" rx="7" fill="#13151f" stroke="rgba(31,217,184,.3)" stroke-width="1.2"/>
+          <text x="381" y="163" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600">MODULAR PLANT</text>
+          <rect x="312" y="170" width="30" height="22" rx="11" fill="rgba(31,217,184,.12)" stroke="#1fd9b8" stroke-width="1.2"/>
+          <rect x="350" y="170" width="30" height="22" rx="11" fill="rgba(31,217,184,.12)" stroke="#1fd9b8" stroke-width="1.2"/>
+          <rect x="388" y="170" width="30" height="22" rx="11" fill="rgba(31,217,184,.12)" stroke="#1fd9b8" stroke-width="1.2"/>
+          <text x="327" y="185" text-anchor="middle" fill="#1fd9b8" font-size="7">77MW</text>
+          <text x="365" y="185" text-anchor="middle" fill="#1fd9b8" font-size="7">77MW</text>
+          <text x="403" y="185" text-anchor="middle" fill="#1fd9b8" font-size="7">77MW</text>
+          <text x="381" y="218" text-anchor="middle" fill="#3a3f58" font-size="8">Scale as demand grows</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 3: FISSION TO GRID ══ -->
+<div class="slide"
+  data-notes="The physics is identical to any nuclear plant. U-235 fissions — the mass defect converts to energy via E=mc². 200 MeV per event. That heats pressurized water held at 310°C and 15.5 MPa — which transfers heat via steam generator to a secondary loop. Steam expands isentropically through the turbine — Rankine cycle. Efficiency is 30-35%, a thermodynamic ceiling set by the operating temperatures, not a design flaw. The T-s diagram on screen shows the four states: pump, boiler, turbine, condenser.">
+  <div class="hd"><span class="num">03</span><h2 class="ttl">How It Works: Fission to Grid</h2></div>
+  <div class="body">
+    <div class="col-l">
+      <div class="flow">
+        <div class="flow-step red"><span class="flow-n">1</span><span class="flow-txt"><strong>U-235 fission</strong> — neutron absorption splits nucleus; mass defect Δm → energy E = mc² · ~200 MeV per event</span></div>
+        <div class="flow-step red"><span class="flow-n">2</span><span class="flow-txt"><strong>Primary loop</strong> — fission heats pressurized water to 310 °C at 15.5 MPa; stays liquid under pressure (no boiling)</span></div>
+        <div class="flow-step blue"><span class="flow-n">3</span><span class="flow-txt"><strong>Steam generator</strong> — helical tube bundle transfers heat to secondary loop; secondary water boils to steam</span></div>
+        <div class="flow-step blue"><span class="flow-n">4</span><span class="flow-txt"><strong>Turbine</strong> — steam expands isentropically (state 3→4 on T-s diagram), spinning turbine shaft → generator</span></div>
+        <div class="flow-step teal"><span class="flow-n">5</span><span class="flow-txt"><strong>Condenser</strong> — exhausted steam returns to liquid (state 4→1); pump restores pressure (1→2)</span></div>
+      </div>
+      <div class="eq-box">
+        <div class="eq-lbl">Rankine Cycle Thermal Efficiency</div>
+        <div class="eq">η = W<sub>net</sub> / Q<sub>in</sub> = [(h₃−h₄) − (h₂−h₁)] / (h₃−h₂)</div>
+        <div class="eq-note">NuScale: T<sub>H</sub> ≈ 310°C · T<sub>C</sub> ≈ 35°C · η<sub>thermal</sub> ≈ 30–35% &nbsp;|&nbsp; 1 kg U-235 ≈ 8,000 t coal equivalent</div>
+      </div>
+      <div class="callout">30–35% is the thermodynamic ceiling for these temperatures — not a design flaw, just physics</div>
+    </div>
+    <div class="col-r">
+      <div class="fig" style="flex:1">
+        <div class="fig-lbl">Rankine Cycle — T-s Diagram (based on IAPWS IF-97 steam tables)</div>
+        <svg viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif" style="width:100%;height:100%;max-height:55vh">
+          <defs>
+            <linearGradient id="domeGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#6ba3f5" stop-opacity=".18"/>
+              <stop offset="100%" stop-color="#6ba3f5" stop-opacity=".04"/>
+            </linearGradient>
+          </defs>
+          <!-- Axes -->
+          <line x1="55" y1="15" x2="55" y2="220" stroke="#3a3f58" stroke-width="1.5"/>
+          <line x1="55" y1="220" x2="400" y2="220" stroke="#3a3f58" stroke-width="1.5"/>
+          <!-- Axis arrows -->
+          <polygon points="55,10 51,20 59,20" fill="#3a3f58"/>
+          <polygon points="405,220 395,216 395,224" fill="#3a3f58"/>
+          <!-- Axis labels -->
+          <text x="28" y="120" text-anchor="middle" fill="#7a7f9a" font-size="11" font-weight="500" transform="rotate(-90,28,120)">Temperature T (°C)</text>
+          <text x="228" y="242" text-anchor="middle" fill="#7a7f9a" font-size="11" font-weight="500">Specific Entropy s (kJ/kg·K)</text>
+          <!-- Saturation dome (vapor dome) -->
+          <!-- Left sat liquid line -->
+          <path d="M120,210 C118,190 115,165 118,140 C122,110 132,85 150,65 C165,48 185,38 210,33"
+            fill="none" stroke="#3a3f58" stroke-width="1.2" stroke-dasharray="5,3"/>
+          <!-- Right sat vapor line -->
+          <path d="M210,33 C240,38 268,55 285,80 C300,102 308,130 310,160 C312,183 310,200 308,212"
+            fill="none" stroke="#3a3f58" stroke-width="1.2" stroke-dasharray="5,3"/>
+          <!-- Dome fill -->
+          <path d="M120,210 C118,190 115,165 118,140 C122,110 132,85 150,65 C165,48 185,38 210,33 C240,38 268,55 285,80 C300,102 308,130 310,160 C312,183 310,200 308,212 Z"
+            fill="url(#domeGrad)"/>
+          <!-- Critical point -->
+          <circle cx="210" cy="33" r="4" fill="#6ba3f5" opacity=".7"/>
+          <text x="218" y="30" fill="#3a3f58" font-size="8.5">Critical point</text>
+          <!-- Dome label -->
+          <text x="215" y="130" text-anchor="middle" fill="#3a3f58" font-size="9" font-style="italic">Two-phase</text>
+          <text x="215" y="142" text-anchor="middle" fill="#3a3f58" font-size="9" font-style="italic">region</text>
+
+          <!-- RANKINE CYCLE PATH -->
+          <!-- State points: 1(pump in)=low T low s, 2(pump out)=low T low s+tiny, 3(turbine in)=high T, 4(turbine out)=medium T high s -->
+          <!-- 1: (80, 210)  2: (82, 175)  3: (320, 60)  4: (320, 210) -->
+          <!-- Process 1→2: isentropic pump (nearly vertical, slight s increase) -->
+          <line x1="80" y1="212" x2="82" y2="172" stroke="#f5b63e" stroke-width="2.2" stroke-linecap="round"/>
+          <!-- Process 2→3: isobaric boiler (horizontal then curving up) -->
+          <path d="M82,172 C82,172 100,172 140,155 C185,135 260,80 320,60" fill="none" stroke="#f05a5a" stroke-width="2.2" stroke-linecap="round"/>
+          <!-- Process 3→4: isentropic expansion (vertical down) -->
+          <line x1="320" y1="60" x2="308" y2="212" stroke="#6ba3f5" stroke-width="2.2" stroke-linecap="round"/>
+          <!-- Process 4→1: isobaric condenser (horizontal left) -->
+          <line x1="308" y1="212" x2="80" y2="212" stroke="#1fd9b8" stroke-width="2.2" stroke-linecap="round"/>
+
+          <!-- State point dots -->
+          <circle cx="80"  cy="212" r="5" fill="#f5b63e" stroke="#08090f" stroke-width="1.5"/>
+          <circle cx="82"  cy="172" r="5" fill="#f5b63e" stroke="#08090f" stroke-width="1.5"/>
+          <circle cx="320" cy="60"  r="5" fill="#f05a5a" stroke="#08090f" stroke-width="1.5"/>
+          <circle cx="308" cy="212" r="5" fill="#6ba3f5" stroke="#08090f" stroke-width="1.5"/>
+
+          <!-- State labels -->
+          <text x="64"  y="216" text-anchor="middle" fill="#f5b63e" font-size="10" font-weight="600">1</text>
+          <text x="64"  y="170" text-anchor="middle" fill="#f5b63e" font-size="10" font-weight="600">2</text>
+          <text x="334" y="58"  text-anchor="middle" fill="#f05a5a" font-size="10" font-weight="600">3</text>
+          <text x="322" y="229" text-anchor="middle" fill="#6ba3f5" font-size="10" font-weight="600">4</text>
+
+          <!-- Process labels -->
+          <text x="60" y="193" text-anchor="middle" fill="#f5b63e" font-size="8">① Pump</text>
+          <text x="60" y="203" text-anchor="middle" fill="#f5b63e" font-size="7.5">isentropic</text>
+          <text x="195" y="108" text-anchor="middle" fill="#f05a5a" font-size="8">② Boiler</text>
+          <text x="195" y="118" text-anchor="middle" fill="#f05a5a" font-size="7.5">isobaric Q_in</text>
+          <text x="348" y="136" text-anchor="middle" fill="#6ba3f5" font-size="8">③ Turbine</text>
+          <text x="348" y="146" text-anchor="middle" fill="#6ba3f5" font-size="7.5">isentropic</text>
+          <text x="195" y="230" text-anchor="middle" fill="#1fd9b8" font-size="8">④ Condenser — isobaric Q_out</text>
+
+          <!-- High/low pressure lines -->
+          <line x1="55" y1="60"  x2="320" y2="60"  stroke="#3a3f58" stroke-width=".7" stroke-dasharray="4,3"/>
+          <line x1="55" y1="172" x2="82"  y2="172" stroke="#3a3f58" stroke-width=".7" stroke-dasharray="4,3"/>
+          <text x="57" y="57"  fill="#3a3f58" font-size="7.5">High P (~310°C, 15.5 MPa)</text>
+          <text x="57" y="169" fill="#3a3f58" font-size="7.5">Low P (~35°C)</text>
+
+          <!-- Efficiency annotation -->
+          <rect x="58" y="70" width="112" height="34" rx="4" fill="rgba(24,212,176,.08)" stroke="rgba(24,212,176,.22)" stroke-width="1"/>
+          <text x="114" y="85"  text-anchor="middle" fill="#1fd9b8" font-size="8.5" font-weight="600">η = W_net / Q_in</text>
+          <text x="114" y="97"  text-anchor="middle" fill="#7a7f9a" font-size="8">NuScale: η ≈ 30–35%</text>
+        </svg>
+        <div class="cap">Rankine cycle T-s diagram — four thermodynamic states mapped to NuScale operating conditions</div>
+      </div>
+      <div class="stats col3">
+        <div class="stat"><div class="stat-v">15.5 MPa</div><div class="stat-l">Primary coolant pressure</div></div>
+        <div class="stat"><div class="stat-v">310 °C</div><div class="stat-l">Primary loop temperature</div></div>
+        <div class="stat"><div class="stat-v">~32%</div><div class="stat-l">Thermal efficiency</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 4: PASSIVE SAFETY ══ -->
+<div class="slide"
+  data-notes="Every reactor — even after shutdown — continues producing decay heat from fission product decay. In conventional plants you remove that heat with electrically powered pumps. Fukushima showed what happens when pumps lose power. NuScale eliminates that failure mode entirely. Natural circulation: hot coolant is less dense, so it rises; cooler fluid descends to replace it. A convection loop driven by thermodynamics alone — no pumps, no external power, no operator action. The safety case is physics, not procedure. NRC certified this design in 2020 partly on this basis.">
+  <div class="hd"><span class="num">04</span><h2 class="ttl">NuScale: Passive Safety</h2></div>
+  <div class="body">
+    <div class="col-l">
+      <ul class="bullets">
+        <li>Every reactor produces <span class="warn">decay heat</span> after shutdown — must be continuously removed</li>
+        <li>Conventional plants: electrically powered pumps remove decay heat</li>
+        <li><span class="bad">Fukushima 2011:</span> station blackout → pumps failed → decay heat → meltdown</li>
+        <li>NuScale: <span class="hi">natural circulation only</span> — hot coolant rises, cool descends, thermodynamic loop closes</li>
+        <li>No pumps · no external power · no operator action · <span class="hi">self-cooling indefinitely</span></li>
+      </ul>
+      <div class="callout">The safety case is physics, not procedure — NRC-certified on this basis (2020)</div>
+    </div>
+    <div class="col-r">
+      <div class="fig" style="flex:1;min-height:0">
+        <div class="fig-lbl">NuScale natural circulation loop — based on published NuScale technical specifications</div>
+        <svg viewBox="0 0 480 240" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif" style="width:100%;height:100%;max-height:52vh">
+          <defs>
+            <marker id="mu" markerWidth="7" markerHeight="6" refX="3.5" refY="6" orient="auto"><polygon points="0,6 3.5,0 7,6" fill="#f05a5a"/></marker>
+            <marker id="md" markerWidth="7" markerHeight="6" refX="3.5" refY="0" orient="auto"><polygon points="0,0 3.5,6 7,0" fill="#6ba3f5"/></marker>
+            <marker id="mr" markerWidth="7" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0,0 7,3 0,6" fill="#1fd9b8"/></marker>
+          </defs>
+
+          <!-- LEFT PANEL: conventional with pumps -->
+          <rect x="8" y="8" width="210" height="228" rx="10" fill="#0f1018" stroke="rgba(240,90,90,.2)" stroke-width="1"/>
+          <text x="113" y="24" text-anchor="middle" fill="#f05a5a" font-size="9" font-weight="600" letter-spacing=".08em">CONVENTIONAL</text>
+          <!-- core -->
+          <rect x="68" y="170" width="90" height="38" rx="4" fill="rgba(240,90,90,.1)" stroke="#f05a5a" stroke-width="1.4"/>
+          <text x="113" y="188" text-anchor="middle" fill="#f05a5a" font-size="8.5" font-weight="500">REACTOR CORE</text>
+          <text x="113" y="200" text-anchor="middle" fill="#f05a5a" font-size="7.5">decay heat after shutdown</text>
+          <!-- heat exchanger top -->
+          <rect x="55" y="40" width="116" height="30" rx="5" fill="#13151f" stroke="rgba(107,163,245,.3)" stroke-width="1"/>
+          <text x="113" y="55" text-anchor="middle" fill="#6ba3f5" font-size="8.5" font-weight="500">HEAT EXCHANGER</text>
+          <text x="113" y="66" text-anchor="middle" fill="#3a3f58" font-size="7">cooling</text>
+          <!-- pump -->
+          <circle cx="50" cy="130" r="18" fill="#13151f" stroke="#f05a5a" stroke-width="1.3"/>
+          <text x="50" y="127" text-anchor="middle" fill="#f05a5a" font-size="7.5" font-weight="600">PUMP</text>
+          <text x="50" y="137" text-anchor="middle" fill="#f05a5a" font-size="7">AC power</text>
+          <!-- pipes -->
+          <line x1="80" y1="170" x2="65" y2="148" stroke="#f05a5a" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <line x1="35" y1="118" x2="35" y2="55" stroke="#f05a5a" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <line x1="35" y1="55" x2="55" y2="55" stroke="#f05a5a" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <line x1="171" y1="55" x2="185" y2="55" stroke="#f05a5a" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <line x1="185" y1="55" x2="185" y2="170" stroke="#f05a5a" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <line x1="185" y1="170" x2="158" y2="170" stroke="#f05a5a" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <!-- failure annotation -->
+          <rect x="28" y="108" width="44" height="14" rx="3" fill="rgba(240,90,90,.12)" stroke="rgba(240,90,90,.3)" stroke-width=".8"/>
+          <text x="50" y="118" text-anchor="middle" fill="#f05a5a" font-size="7.5" font-weight="600">FAILS</text>
+          <text x="113" y="222" text-anchor="middle" fill="#f05a5a" font-size="7.5">Blackout → pump fails → meltdown</text>
+
+          <!-- DIVIDER -->
+          <line x1="228" y1="10" x2="228" y2="234" stroke="#2e3350" stroke-width="1"/>
+          <text x="228" y="128" text-anchor="middle" fill="#2e3350" font-size="14" font-weight="700" transform="rotate(-90,228,128)">vs</text>
+
+          <!-- RIGHT PANEL: NuScale natural circulation -->
+          <rect x="242" y="8" width="230" height="228" rx="10" fill="#0f1018" stroke="rgba(24,212,176,.22)" stroke-width="1.2"/>
+          <text x="357" y="24" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600" letter-spacing=".08em">NUSCALE</text>
+
+          <!-- reactor core -->
+          <rect x="302" y="168" width="110" height="40" rx="4" fill="rgba(240,90,90,.1)" stroke="#f05a5a" stroke-width="1.4"/>
+          <text x="357" y="186" text-anchor="middle" fill="#f05a5a" font-size="8.5" font-weight="500">REACTOR CORE</text>
+          <text x="357" y="198" text-anchor="middle" fill="#f05a5a" font-size="7.5">160 MWt</text>
+
+          <!-- steam generator top -->
+          <rect x="288" y="40" width="138" height="30" rx="5" fill="#13151f" stroke="rgba(107,163,245,.3)" stroke-width="1"/>
+          <text x="357" y="55" text-anchor="middle" fill="#6ba3f5" font-size="8.5" font-weight="500">STEAM GENERATOR</text>
+          <text x="357" y="66" text-anchor="middle" fill="#3a3f58" font-size="7">helical tube bundle</text>
+
+          <!-- Hot rising arrow — left -->
+          <line x1="290" y1="168" x2="290" y2="72" stroke="#f05a5a" stroke-width="2" marker-end="url(#mu)"/>
+          <text x="277" y="125" text-anchor="middle" fill="#f05a5a" font-size="7.5" font-weight="500" transform="rotate(-90,277,125)">HOT RISES (ρ↓)</text>
+
+          <!-- Cool descending arrow — right -->
+          <line x1="424" y1="72" x2="424" y2="168" stroke="#6ba3f5" stroke-width="2" marker-end="url(#md)"/>
+          <text x="437" y="120" text-anchor="middle" fill="#6ba3f5" font-size="7.5" font-weight="500" transform="rotate(90,437,120)">COOL FALLS (ρ↑)</text>
+
+          <!-- No pumps badge -->
+          <rect x="300" y="108" width="114" height="42" rx="6" fill="#07080e" stroke="rgba(24,212,176,.4)" stroke-width="1.2"/>
+          <text x="357" y="126" text-anchor="middle" fill="#1fd9b8" font-size="12" font-weight="600">NO PUMPS</text>
+          <text x="357" y="140" text-anchor="middle" fill="#7a7f9a" font-size="7.5">Gravity + thermodynamics only</text>
+
+          <!-- Success annotation -->
+          <text x="357" y="222" text-anchor="middle" fill="#1fd9b8" font-size="7.5">Blackout → loop continues → safe</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 5: WHY NUSCALE LEADS ══ -->
+<div class="slide"
+  data-notes="NuScale is the most deployment-ready SMR in the world. First and only SMR with U.S. NRC design certification — arguably the world's most rigorous nuclear regulator. The integral PWR design puts the reactor core, steam generator, and pressurizer all inside one sealed pressure vessel, eliminating external piping and the large-bore LOCAs that come with it. Each module is 77 MWe. Six modules gives a 462 MW plant. The NRC uprated the design again in 2025.">
+  <div class="hd"><span class="num">05</span><h2 class="ttl">Why NuScale Leads</h2></div>
+  <div class="body">
+    <div class="col-l">
+      <ul class="bullets">
+        <li><span class="hi">First and only SMR</span> with U.S. NRC design certification (2020) — world's most rigorous nuclear regulator</li>
+        <li><span class="hi">Integral PWR:</span> core + steam generator + pressurizer inside <em>one sealed vessel</em> — no external piping, no large-bore LOCA risk</li>
+        <li>Vessel: <span class="hi">20 m tall · 2.7 m diameter</span> · shipped in 3 segments by truck, rail, or barge</li>
+        <li><span class="hi">77 MWe per module</span> · 250 MWt thermal · up to 12 modules = 924 MWe</li>
+        <li>NRC uprated design approved <span class="hi">2025</span> · regulatory momentum building</li>
+      </ul>
+      <div class="callout">First-mover advantage backed by the world's toughest regulator</div>
+    </div>
+    <div class="col-r">
+      <!-- Integral vessel diagram based on published NuScale specs -->
+      <div class="fig">
+        <div class="fig-lbl">NuScale Power Module — schematic based on published specs (NuScale Corp. proprietary imagery unavailable)</div>
+        <svg viewBox="0 0 460 270" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif">
+          <!-- Left: vessel cross-section -->
+          <text x="110" y="14" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600" letter-spacing=".08em">INTEGRAL VESSEL (20m × 2.7m)</text>
+          <!-- Containment outer -->
+          <rect x="20" y="20" width="180" height="230" rx="28" fill="#0f1018" stroke="rgba(31,217,184,.3)" stroke-width="1.8"/>
+          <!-- Pool water -->
+          <rect x="22" y="22" width="176" height="226" rx="26" fill="rgba(107,163,245,.04)"/>
+          <!-- RPV inner -->
+          <rect x="46" y="36" width="128" height="198" rx="20" fill="#13151f" stroke="rgba(31,217,184,.5)" stroke-width="1.3"/>
+          <!-- Pressurizer -->
+          <rect x="68" y="44" width="84" height="30" rx="8" fill="rgba(31,217,184,.12)" stroke="#1fd9b8" stroke-width="1"/>
+          <text x="110" y="63" text-anchor="middle" fill="#1fd9b8" font-size="8" font-weight="500">PRESSURIZER</text>
+          <!-- Hot riser -->
+          <rect x="90" y="80" width="40" height="72" rx="4" fill="rgba(240,90,90,.1)" stroke="#f05a5a" stroke-width="1"/>
+          <text x="110" y="100" text-anchor="middle" fill="#f05a5a" font-size="7.5">HOT</text>
+          <text x="110" y="112" text-anchor="middle" fill="#f05a5a" font-size="7.5">RISER</text>
+          <!-- Steam generator (helical) around riser -->
+          <rect x="62" y="80" width="26" height="72" rx="3" fill="rgba(107,163,245,.1)" stroke="#6ba3f5" stroke-width="1"/>
+          <rect x="132" y="80" width="26" height="72" rx="3" fill="rgba(107,163,245,.1)" stroke="#6ba3f5" stroke-width="1"/>
+          <text x="110" y="165" text-anchor="middle" fill="#6ba3f5" font-size="7.5">STEAM GEN</text>
+          <!-- Core -->
+          <rect x="68" y="162" width="84" height="56" rx="5" fill="rgba(240,90,90,.12)" stroke="#f05a5a" stroke-width="1.2"/>
+          <text x="110" y="186" text-anchor="middle" fill="#f05a5a" font-size="8.5" font-weight="500">REACTOR CORE</text>
+          <text x="110" y="200" text-anchor="middle" fill="#f05a5a" font-size="7.5">37 fuel assemblies · 160 MWt</text>
+          <text x="110" y="213" text-anchor="middle" fill="#f05a5a" font-size="7.5">17×17 pin array · &lt;5% enrichment</text>
+          <!-- Labels -->
+          <text x="110" y="250" text-anchor="middle" fill="#1fd9b8" font-size="8" font-weight="500">One sealed vessel — no external piping</text>
+
+          <!-- Right: scaling -->
+          <text x="340" y="14" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600" letter-spacing=".08em">MODULAR SCALING</text>
+          <!-- ×1 -->
+          <rect x="240" y="22" width="26" height="72" rx="13" fill="rgba(31,217,184,.08)" stroke="#1fd9b8" stroke-width="1.2"/>
+          <text x="253" y="103" text-anchor="middle" fill="#7a7f9a" font-size="8">×1</text>
+          <text x="253" y="114" text-anchor="middle" fill="#7a7f9a" font-size="7.5">77 MW</text>
+          <!-- ×2 -->
+          <rect x="278" y="22" width="26" height="72" rx="13" fill="rgba(31,217,184,.08)" stroke="#1fd9b8" stroke-width="1.2"/>
+          <rect x="308" y="22" width="26" height="72" rx="13" fill="rgba(31,217,184,.08)" stroke="#1fd9b8" stroke-width="1.2"/>
+          <text x="307" y="103" text-anchor="middle" fill="#7a7f9a" font-size="8">×2</text>
+          <text x="307" y="114" text-anchor="middle" fill="#7a7f9a" font-size="7.5">154 MW</text>
+          <!-- ×6 highlighted -->
+          <rect x="345" y="14" width="110" height="88" rx="8" fill="rgba(31,217,184,.05)" stroke="rgba(31,217,184,.3)" stroke-width="1.2"/>
+          <rect x="352" y="22" width="26" height="72" rx="13" fill="rgba(31,217,184,.18)" stroke="#1fd9b8" stroke-width="1.5"/>
+          <rect x="384" y="22" width="26" height="72" rx="13" fill="rgba(31,217,184,.18)" stroke="#1fd9b8" stroke-width="1.5"/>
+          <text x="400" y="103" text-anchor="middle" fill="#1fd9b8" font-size="8.5" font-weight="600">×6</text>
+          <text x="400" y="115" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600">462 MW</text>
+          <text x="400" y="127" text-anchor="middle" fill="#7a7f9a" font-size="7.5">VOYGR-6 plant</text>
+
+          <!-- Scale arrow -->
+          <line x1="253" y1="135" x2="400" y2="135" stroke="rgba(31,217,184,.2)" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#t)"/>
+          <text x="326" y="148" text-anchor="middle" fill="#3a3f58" font-size="7.5">Add modules as demand grows</text>
+
+          <!-- Key specs table -->
+          <rect x="240" y="158" width="210" height="98" rx="7" fill="#13151f" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+          <text x="345" y="174" text-anchor="middle" fill="#7a7f9a" font-size="8" font-weight="600" letter-spacing=".08em">KEY SPECS</text>
+          <text x="250" y="190" fill="#3a3f58" font-size="8">Output</text><text x="445" y="190" text-anchor="end" fill="#1fd9b8" font-size="8">77 MWe / 250 MWt per module</text>
+          <text x="250" y="205" fill="#3a3f58" font-size="8">Vessel</text><text x="445" y="205" text-anchor="end" fill="#7a7f9a" font-size="8">20 m tall · 2.7 m dia</text>
+          <text x="250" y="220" fill="#3a3f58" font-size="8">Fuel cycle</text><text x="445" y="220" text-anchor="end" fill="#7a7f9a" font-size="8">Up to 21 months · &lt;5% enriched</text>
+          <text x="250" y="235" fill="#3a3f58" font-size="8">Capacity factor</text><text x="445" y="235" text-anchor="end" fill="#7a7f9a" font-size="8">≥95%</text>
+          <text x="250" y="250" fill="#3a3f58" font-size="8">NRC certification</text><text x="445" y="250" text-anchor="end" fill="#1fd9b8" font-size="8">2020 (only SMR) · uprated 2025</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 6: ECONOMIC REALITY ══ -->
+<div class="slide"
+  data-notes="Now the hard part — and I want to be honest about this. Capital costs are 6 to 10 thousand dollars per kilowatt installed — not cheaper than conventional nuclear. LCOE is 65 to 90 dollars per megawatt-hour. That can't compete with utility-scale solar at 30 to 40. The core problem is loss of economies of scale — big plants spread fixed costs over more megawatts. SMRs don't get that advantage yet. The cancellation of NuScale's flagship UAMPS Idaho project in 2023 confirmed that first-of-a-kind cost risk is real — the LCOE hit 89 dollars per megawatt-hour and subscribers pulled out.">
+  <div class="hd"><span class="num">06</span><h2 class="ttl">The Economic Reality</h2></div>
+  <div class="body">
+    <div class="col-l">
+      <ul class="bullets">
+        <li>Capital cost: <span class="bad">$6,000–$10,000 /kW</span> — comparable to or worse than conventional nuclear per kW</li>
+        <li>LCOE: <span class="warn">$65–90 /MWh</span> vs. utility solar at <span class="hi">$30–40 /MWh</span></li>
+        <li>Root cause: <span class="warn">loss of economies of scale</span> — large plants spread fixed costs over more MW; SMRs can't yet</li>
+        <li><span class="bad">UAMPS Idaho cancelled 2023</span> — LCOE reached $89/MWh, subscribers withdrew</li>
+        <li>FOAK cost risk is <span class="bad">real</span>, not theoretical — first projects carry the full learning burden</li>
+      </ul>
+      <div class="callout">Economics are the barrier — not engineering. The technology works.</div>
+    </div>
+    <div class="col-r">
+      <!-- LCOE bar chart -->
+      <div class="fig" style="flex:1">
+        <div class="fig-lbl">Levelized Cost of Energy — LCOE ($/MWh) &nbsp;· Sources: IEA 2020, DOE/OSTI 2024, IEEFA 2024</div>
+        <svg viewBox="0 0 440 270" xmlns="http://www.w3.org/2000/svg" font-family="'Outfit',sans-serif">
+          <!-- Axes -->
+          <line x1="60" y1="20" x2="60" y2="220" stroke="#3a3f58" stroke-width="1.2"/>
+          <line x1="60" y1="220" x2="420" y2="220" stroke="#3a3f58" stroke-width="1.2"/>
+          <!-- Grid (scale: 200$/MWh = 200px, 1$/MWh = 1px) -->
+          <line x1="60" y1="170" x2="420" y2="170" stroke="#1e2030" stroke-width="1"/>
+          <text x="50" y="174" text-anchor="end" fill="#3a3f58" font-size="8">50</text>
+          <line x1="60" y1="120" x2="420" y2="120" stroke="#1e2030" stroke-width="1"/>
+          <text x="50" y="124" text-anchor="end" fill="#3a3f58" font-size="8">100</text>
+          <line x1="60" y1="70"  x2="420" y2="70"  stroke="#1e2030" stroke-width="1"/>
+          <text x="50" y="74"  text-anchor="end" fill="#3a3f58" font-size="8">150</text>
+          <line x1="60" y1="20"  x2="420" y2="20"  stroke="#1e2030" stroke-width="1"/>
+          <text x="50" y="24"  text-anchor="end" fill="#3a3f58" font-size="8">200</text>
+          <!-- Y label -->
+          <text x="14" y="120" text-anchor="middle" fill="#3a3f58" font-size="8" transform="rotate(-90,14,120)">$/MWh</text>
+
+          <!-- BAR 1: Solar $30-40 -->
+          <!-- bar: bottom=220, 30$/=30px height, midpoint at 35$ → top=185 -->
+          <rect x="90" y="183" width="60" height="37" rx="3" fill="#1fd9b8" opacity=".8"/>
+          <!-- range whisker: 30-40 → 190 to 180 -->
+          <line x1="120" y1="180" x2="120" y2="190" stroke="#1fd9b8" stroke-width="1.2"/>
+          <line x1="113" y1="180" x2="127" y2="180" stroke="#1fd9b8" stroke-width="1.5"/>
+          <line x1="113" y1="190" x2="127" y2="190" stroke="#1fd9b8" stroke-width="1.5"/>
+          <text x="120" y="236" text-anchor="middle" fill="#7a7f9a" font-size="9">Solar</text>
+          <text x="120" y="247" text-anchor="middle" fill="#7a7f9a" font-size="7.5">(utility-scale)</text>
+          <text x="120" y="175" text-anchor="middle" fill="#1fd9b8" font-size="9" font-weight="600">$30–40</text>
+
+          <!-- BAR 2: SMR $65-90 HIGHLIGHTED -->
+          <rect x="185" y="130" width="60" height="90" rx="3" fill="#f05a5a" opacity=".7"/>
+          <line x1="215" y1="110" x2="215" y2="155" stroke="#f05a5a" stroke-width="1.2"/>
+          <line x1="208" y1="110" x2="222" y2="110" stroke="#f05a5a" stroke-width="1.5"/>
+          <line x1="208" y1="155" x2="222" y2="155" stroke="#f05a5a" stroke-width="1.5"/>
+          <rect x="180" y="105" width="70" height="125" rx="5" fill="none" stroke="#f05a5a" stroke-width="1.2" stroke-dasharray="4,3"/>
+          <text x="215" y="236" text-anchor="middle" fill="#f05a5a" font-size="9" font-weight="600">SMR</text>
+          <text x="215" y="247" text-anchor="middle" fill="#f05a5a" font-size="7.5">(NuScale)</text>
+          <text x="215" y="100" text-anchor="middle" fill="#f05a5a" font-size="9" font-weight="600">$65–90</text>
+
+          <!-- BAR 3: Gas $70-100 -->
+          <rect x="280" y="120" width="60" height="100" rx="3" fill="#f5b942" opacity=".65"/>
+          <line x1="310" y1="110" x2="310" y2="150" stroke="#f5b942" stroke-width="1.2"/>
+          <line x1="303" y1="110" x2="317" y2="110" stroke="#f5b942" stroke-width="1.5"/>
+          <line x1="303" y1="150" x2="317" y2="150" stroke="#f5b942" stroke-width="1.5"/>
+          <text x="310" y="236" text-anchor="middle" fill="#7a7f9a" font-size="9">Gas CCGT</text>
+          <text x="310" y="247" text-anchor="middle" fill="#7a7f9a" font-size="7.5">(+ carbon price)</text>
+          <text x="310" y="105" text-anchor="middle" fill="#f5b942" font-size="9" font-weight="600">$70–100</text>
+
+          <!-- BAR 4: Conv Nuclear $90-140 -->
+          <rect x="363" y="80" width="45" height="140" rx="3" fill="#7a7f9a" opacity=".45"/>
+          <line x1="385" y1="60" x2="385" y2="130" stroke="#7a7f9a" stroke-width="1.2"/>
+          <line x1="378" y1="60" x2="392" y2="60" stroke="#7a7f9a" stroke-width="1.5"/>
+          <line x1="378" y1="130" x2="392" y2="130" stroke="#7a7f9a" stroke-width="1.5"/>
+          <text x="385" y="236" text-anchor="middle" fill="#7a7f9a" font-size="9">Conv.</text>
+          <text x="385" y="247" text-anchor="middle" fill="#7a7f9a" font-size="7.5">Nuclear</text>
+          <text x="385" y="55" text-anchor="middle" fill="#7a7f9a" font-size="9" font-weight="600">$90–140</text>
+
+          <!-- UAMPS note -->
+          <rect x="60" y="257" width="360" height="12" rx="3" fill="rgba(240,90,90,.07)" stroke="rgba(240,90,90,.2)" stroke-width=".8"/>
+          <text x="240" y="266" text-anchor="middle" fill="#f05a5a" font-size="7.5">⚠ UAMPS Idaho project cancelled 2023 — LCOE reached $89/MWh, subscribers withdrew</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 7: BARRIERS ══ -->
+<div class="slide"
+  data-notes="Three interconnected barriers. Regulatory: even with NRC certification, project-level licensing is slow — the framework was designed for one-off large plants, not modular repeated deployment. Supply chain: the factory model that makes SMRs attractive doesn't exist at scale yet — cost advantages are largely theoretical until many plants are ordered. Market: solar and wind costs keep falling while SMR costs stay flat. SMRs need nth-of-a-kind economics — where the 10th or 20th unit benefits from accumulated manufacturing learning. All three are connected: solving one helps the others.">
+  <div class="hd"><span class="num">07</span><h2 class="ttl">Barriers to Deployment</h2></div>
+  <div class="body" style="flex-direction:column">
+    <div class="barriers">
+      <div class="barrier">
+        <div class="barrier-title">Regulatory</div>
+        <div class="barrier-body">NRC design certification exists — but <strong style="color:#eef0f8">project-level licensing</strong> remains slow and expensive. The regulatory framework was built for one-off large plants, not modular repeated deployments. Each new site still needs individual review.</div>
+        <div class="barrier-tag">Years per project · not designed for modularity</div>
+      </div>
+      <div class="barrier">
+        <div class="barrier-title">Supply Chain</div>
+        <div class="barrier-body">The factory manufacturing model that makes SMRs attractive <strong style="color:#eef0f8">doesn't exist at scale yet</strong>. Cost advantages remain largely theoretical until sufficient orders exist to justify factory investment. FOAK costs carry the full learning burden.</div>
+        <div class="barrier-tag">~20% cost reduction per unit at scale (estimated)</div>
+      </div>
+      <div class="barrier">
+        <div class="barrier-title">Market Competition</div>
+        <div class="barrier-body">Solar and wind LCOE <strong style="color:#eef0f8">keeps falling</strong> while SMR costs stay flat. SMRs need nth-of-a-kind economics — where the 10th or 20th plant benefits from accumulated manufacturing learning — to close the gap.</div>
+        <div class="barrier-tag">Solar: $30–40/MWh and falling · SMR: $65–90/MWh flat</div>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:.8rem">All three barriers are interconnected — solving one helps the others. The first projects are the unlock.</div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 8: WHERE SMRs FIT ══ -->
+<div class="slide"
+  data-notes="So where does this leave us? SMRs are not a silver bullet and won't out-compete solar on cost. But they fill a very specific gap: firm, dispatchable, low-carbon baseload power — what the grid needs when wind stops blowing and sun goes down. No battery technology at scale can fill this gap today. The engineering is proven, the passive safety is real, the regulatory path exists. The remaining barrier is economic — and it's solvable, if the first projects get financed and built.">
+  <div class="hd"><span class="num">08</span><h2 class="ttl">Where SMRs Fit</h2></div>
+  <div class="body">
+    <div class="col-l">
+      <ul class="bullets">
+        <li>Not a silver bullet — <span class="bad">won't out-compete solar on cost</span></li>
+        <li>They fill a specific gap: <span class="hi">firm, dispatchable, low-carbon baseload</span></li>
+        <li>No battery technology at scale fills this gap today</li>
+        <li><span class="hi">Engineering proven</span> · <span class="hi">Passive safety real</span> · Regulatory path exists</li>
+        <li>Remaining barrier is <span class="warn">economic</span> — solvable if first projects get built</li>
+      </ul>
+      <div class="callout">A specific tool for a specific gap — if the first projects get financed</div>
+    </div>
+    <div class="col-r">
+      <!-- 2x2 matrix -->
+      <div class="matrix-wrap" style="position:relative;flex:1">
+        <div style="position:absolute;left:-1.4rem;top:0;bottom:2rem;display:flex;flex-direction:column;justify-content:space-between;align-items:center;">
+          <span style="font-size:.6rem;color:#1fd9b8;letter-spacing:.08em;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg)">Low-carbon</span>
+          <span style="font-size:.6rem;color:#f5b942;letter-spacing:.08em;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg)">High-carbon</span>
+        </div>
+        <div class="matrix">
+          <div class="quad">
+            <div style="font-size:1.2rem;opacity:.6">☀️</div>
+            <div class="quad-name" style="color:#1fd9b8;font-size:clamp(.85rem,1.2vw,.95rem)">Solar / Wind</div>
+            <div class="quad-sub">Low cost · variable output · intermittent</div>
+          </div>
+          <div class="quad hl">
+            <div style="font-size:1.2rem;opacity:.8">⚛</div>
+            <div class="quad-name">SMRs</div>
+            <div class="quad-sub" style="color:#1fd9b8;font-size:.7rem">Firm · dispatchable · low-carbon baseload</div>
+          </div>
+          <div class="quad" style="opacity:.5">
+            <div class="quad-name" style="color:#3a3f58;font-size:.85rem">—</div>
+            <div class="quad-sub">No major source occupies this quadrant</div>
+          </div>
+          <div class="quad">
+            <div style="font-size:1.2rem;opacity:.6">🏭</div>
+            <div class="quad-name" style="color:#f5b942;font-size:clamp(.85rem,1.2vw,.95rem)">Gas / Coal</div>
+            <div class="quad-sub">Reliable · high-carbon · dispatchable</div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:0 .2rem;margin-top:.4rem">
+          <span style="font-size:.6rem;color:#3a3f58;letter-spacing:.08em;text-transform:uppercase">Intermittent</span>
+          <span style="font-size:.6rem;color:#3a3f58;letter-spacing:.08em;text-transform:uppercase">Dispatchable</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 9: REFERENCES ══ -->
+<div class="slide" data-notes="References slide.">
+  <div class="hd"><span class="num">REF</span><h2 class="ttl">References</h2></div>
+  <div class="refs-grid">
+    <ol>
+      <li>U.S. Nuclear Regulatory Commission. NuScale SMR Design Certification. <em>Federal Register</em>, Vol. 88 No. 11, Jan. 2023. <span class="src">federalregister.gov</span></li>
+      <li>U.S. Department of Energy. NRC Approves NuScale's Uprated SMR Design. Office of Nuclear Energy, May 2025. <span class="src">energy.gov</span></li>
+      <li>International Energy Agency. <em>Projected Costs of Generating Electricity</em>. IEA/NEA, 2020. <span class="src">iea.org</span></li>
+      <li>International Energy Agency. <em>World Energy Outlook 2024</em>. IEA, 2024. <span class="src">iea.org</span></li>
+      <li>IAEA. <em>Advances in SMR Technology Developments</em>. 2022 Edition. <span class="src">iaea.org</span></li>
+      <li>Asuega, A. et al. Techno-Economic Analysis of Advanced SMRs. DOE/OSTI, 2024. <span class="src">osti.gov</span></li>
+    </ol>
+    <ol start="7">
+      <li>Nøland, J.K. et al. Cost Projections of Small Modular Reactors. IAEA Conference Proceedings, 2024.</li>
+      <li>Vanatta, M. et al. SMRs: Still Too Expensive, Too Slow, and Too Risky. IEEFA, May 2024. <span class="src">ieefa.org</span></li>
+      <li>Steigerwald, B. et al. Economic Potential of SMRs in Europe. <em>Renewable and Sustainable Energy Reviews</em>, 2024. <span class="src">sciencedirect.com</span></li>
+      <li>GLOBSEC. Faster, Cheaper, Smarter? The Promise and Pitfalls of SMRs. June 2025. <span class="src">globsec.org</span></li>
+      <li>UAMPS. Carbon Free Power Project — Final Cost Report. 2023. (LCOE $89/MWh; cancellation)</li>
+      <li>NuScale Power Corp. NPM Technical Specifications. 2025. <span class="src">nuscalepower.com</span></li>
+    </ol>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<div class="progress" id="progress"></div>
+
+<div class="notes-panel" id="notes">
+  <div class="notes-content">
+    <div class="notes-lbl">Speaker Notes</div>
+    <p id="notes-text"></p>
+  </div>
+</div>
+
+<div class="help" id="help">
+  <kbd>→</kbd> next &nbsp;<kbd>←</kbd> prev &nbsp;<kbd>N</kbd> notes &nbsp;<kbd>F</kbd> fullscreen
+</div>
+
+<script>
+(function(){
+  const slides=Array.from(document.querySelectorAll('.deck>.slide'));
+  const progress=document.getElementById('progress');
+  const notesPanel=document.getElementById('notes');
+  const notesText=document.getElementById('notes-text');
+  const help=document.getElementById('help');
+  let cur=0,notesOpen=false;
+
+  function go(idx,showAll){
+    if(idx<0||idx>=slides.length)return;
+    slides[cur].classList.remove('active');
+    cur=idx;
+    slides.forEach(s=>s.classList.remove('active'));
+    slides[cur].classList.add('active');
+    progress.style.width=((cur/(slides.length-1))*100)+'%';
+    notesText.textContent=slides[cur].dataset.notes||'';
+    slides[cur].querySelectorAll('.bullets li').forEach(li=>
+      showAll?li.classList.remove('hidden'):li.classList.add('hidden'));
+  }
+
+  function reveal(){
+    const h=slides[cur].querySelectorAll('.bullets li.hidden');
+    if(h.length){h[0].classList.remove('hidden');return true;}
+    return false;
+  }
+
+  function next(){if(!reveal())go(cur+1,false);}
+  function prev(){go(cur-1,true);}
+  function toggleNotes(){notesOpen=!notesOpen;notesPanel.classList.toggle('open',notesOpen);}
+  function toggleFS(){
+    if(!document.fullscreenElement)document.documentElement.requestFullscreen().catch(()=>{});
+    else document.exitFullscreen();
+  }
+
+  document.addEventListener('keydown',e=>{
+    switch(e.key){
+      case'ArrowRight':case'ArrowDown':case' ':case'PageDown':e.preventDefault();next();break;
+      case'ArrowLeft':case'ArrowUp':case'PageUp':e.preventDefault();prev();break;
+      case'Home':e.preventDefault();go(0,false);break;
+      case'End':e.preventDefault();go(slides.length-1,true);break;
+      case'n':case'N':toggleNotes();break;
+      case'f':case'F':toggleFS();break;
+      case'Escape':if(notesOpen){toggleNotes();e.preventDefault();}break;
+    }
+  });
+
+  document.addEventListener('click',e=>{
+    if(e.target.closest('.notes-panel'))return;
+    e.clientX<window.innerWidth*.25?prev():next();
+  });
+
+  let tx=null;
+  document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;});
+  document.addEventListener('touchend',e=>{
+    if(tx===null)return;
+    const d=e.changedTouches[0].clientX-tx;
+    if(Math.abs(d)>50)d<0?next():prev();
+    tx=null;
+  });
+
+  setTimeout(()=>help.classList.add('fade'),5000);
+  go(0,false);
+})();
+</script>
+</body>
+</html>
